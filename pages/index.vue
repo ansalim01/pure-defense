@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import heroImage from '~/src/assets/images/hero-main.png'
 import SiteApp from '~/src/App.vue'
-import { company, seoServices, siteMeta } from '~/src/data/company'
+import { company, seoFaqs, seoReviews, seoServices, siteMeta } from '~/src/data/company'
 
 const runtimeConfig = useRuntimeConfig()
 const requestUrl = useRequestURL()
@@ -69,6 +69,21 @@ const structuredData = computed(() => ({
           availableLanguage: ['Russian'],
         },
       ],
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '5.0',
+        ratingCount: String(seoReviews.length),
+        reviewCount: String(seoReviews.length),
+        bestRating: '5',
+        worstRating: '1',
+      },
+      review: seoReviews.map((r) => ({
+        '@type': 'Review',
+        author: { '@type': 'Person', name: r.author },
+        datePublished: r.datePublished,
+        reviewRating: { '@type': 'Rating', ratingValue: r.ratingValue, bestRating: '5' },
+        reviewBody: r.text,
+      })),
       hasOfferCatalog: {
         '@type': 'OfferCatalog',
         name: 'Услуги по дезинсекции и дезинфекции',
@@ -84,6 +99,18 @@ const structuredData = computed(() => ({
           priceCurrency: 'RUB',
         })),
       },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${canonicalUrl.value}#faq`,
+      mainEntity: seoFaqs.map((faq) => ({
+        '@type': 'Question',
+        name: faq.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: faq.answer,
+        },
+      })),
     },
   ],
 }))
@@ -113,6 +140,7 @@ useServerSeoMeta({
 
 useHead({
   link: [
+    { rel: 'preload', as: 'image', href: heroImage, fetchpriority: 'high' },
     { rel: 'canonical', href: canonicalUrl },
     { rel: 'alternate', hreflang: 'ru-RU', href: canonicalUrl },
     { rel: 'alternate', hreflang: 'x-default', href: canonicalUrl },

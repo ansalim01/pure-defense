@@ -1,20 +1,20 @@
 import { setHeader } from 'h3'
 import { getSiteOrigin } from '../utils/site-url'
 
+const lastModified = new Date().toISOString().split('T')[0]
+
+const pestSlugs = ['tarakany', 'klopy', 'krysy', 'pleseni', 'dezinfekciya']
+
 export default defineEventHandler((event) => {
   const siteOrigin = getSiteOrigin(event)
-  const lastModified = new Date().toISOString()
   const routes = [
-    {
-      loc: `${siteOrigin}/`,
+    { loc: `${siteOrigin}/`, lastmod: lastModified, priority: '1.0' },
+    ...pestSlugs.map((slug) => ({
+      loc: `${siteOrigin}/vrediteli/${slug}`,
       lastmod: lastModified,
-      priority: '1.0',
-    },
-    {
-      loc: `${siteOrigin}/privacy`,
-      lastmod: lastModified,
-      priority: '0.3',
-    },
+      priority: '0.8',
+    })),
+    { loc: `${siteOrigin}/privacy`, lastmod: lastModified, priority: '0.3' },
   ]
 
   const body = `<?xml version="1.0" encoding="UTF-8"?>

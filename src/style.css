@@ -1016,6 +1016,15 @@ section[id] {
   margin-top: 0;
 }
 
+.service-card__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.service-card__actions .button {
+  flex: 1;
+}
+
 .advantage-panel {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));

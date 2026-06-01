@@ -54,6 +54,9 @@ const services = [
     image: serviceCockroachImage,
     alt: 'Таракан крупным планом на белом фоне',
     position: 'center center',
+    width: 820,
+    height: 820,
+    href: '/vrediteli/tarakany',
   },
   {
     icon: 'bed',
@@ -64,6 +67,9 @@ const services = [
     image: serviceBedbugImage,
     alt: 'Постельные клопы крупным планом на ткани',
     position: 'center center',
+    width: 1014,
+    height: 714,
+    href: '/vrediteli/klopy',
   },
   {
     icon: 'rat',
@@ -74,6 +80,9 @@ const services = [
     image: serviceRatImage,
     alt: 'Крыса на светлом фоне',
     position: 'center center',
+    width: 600,
+    height: 399,
+    href: '/vrediteli/krysy',
   },
   {
     icon: 'spray',
@@ -84,6 +93,9 @@ const services = [
     image: serviceDisinfectionImage,
     alt: 'Специалист проводит обработку помещения у окна',
     position: 'center center',
+    width: 626,
+    height: 417,
+    href: '/vrediteli/dezinfekciya',
   },
   {
     icon: 'mold',
@@ -94,6 +106,9 @@ const services = [
     image: serviceMoldImage,
     alt: 'Плесень в углу стены возле плинтуса',
     position: 'center center',
+    width: 868,
+    height: 651,
+    href: '/vrediteli/pleseni',
   },
 ]
 
@@ -477,6 +492,8 @@ onBeforeUnmount(() => {
                   class="service-card__image"
                   :src="service.image"
                   :alt="service.alt"
+                  :width="service.width"
+                  :height="service.height"
                   :style="{ objectPosition: service.position }"
                   loading="lazy"
                 />
@@ -490,7 +507,10 @@ onBeforeUnmount(() => {
                 <h3>{{ service.title }}</h3>
                 <p>{{ service.subtitle }}</p>
                 <strong>{{ service.price }}</strong>
-                <a class="button button--line button--small" href="#contacts">Заказать</a>
+                <div class="service-card__actions">
+                  <NuxtLink class="button button--line button--small" :to="service.href">Подробнее</NuxtLink>
+                  <a class="button button--primary button--small" href="#contacts">Заказать</a>
+                </div>
               </div>
             </article>
           </div>
@@ -733,11 +753,11 @@ onBeforeUnmount(() => {
 
         <div class="footer__links">
           <h3>Услуги</h3>
-          <a href="#services">Уничтожение тараканов</a>
-          <a href="#services">Уничтожение клопов</a>
-          <a href="#services">Дератизация</a>
-          <a href="#services">Дезинфекция помещений</a>
-          <a href="#services">Удаление плесени</a>
+          <NuxtLink to="/vrediteli/tarakany">Уничтожение тараканов</NuxtLink>
+          <NuxtLink to="/vrediteli/klopy">Уничтожение клопов</NuxtLink>
+          <NuxtLink to="/vrediteli/krysy">Дератизация</NuxtLink>
+          <NuxtLink to="/vrediteli/dezinfekciya">Дезинфекция помещений</NuxtLink>
+          <NuxtLink to="/vrediteli/pleseni">Удаление плесени</NuxtLink>
         </div>
 
         <div class="footer__links">
