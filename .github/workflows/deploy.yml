@@ -52,12 +52,16 @@ jobs:
 
       # ── 6. .env на сервере из GitHub Secrets ──────────────────────────────
       - name: Write .env
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          NUXT_PUBLIC_SITE_URL: ${{ secrets.NUXT_PUBLIC_SITE_URL }}
         run: |
-          cat > /tmp/app.env << 'ENVEOF'
-          TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
-          NUXT_PUBLIC_SITE_URL=${{ secrets.NUXT_PUBLIC_SITE_URL }}
-          ENVEOF
+          {
+            echo "TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}"
+            echo "TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}"
+            echo "NUXT_PUBLIC_SITE_URL=${NUXT_PUBLIC_SITE_URL}"
+          } > /tmp/app.env
 
       # ── 7. Деплой: rsync сборки + .env ────────────────────────────────────
       - name: Ensure rsync on server
