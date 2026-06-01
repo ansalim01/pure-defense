@@ -60,6 +60,12 @@ jobs:
           ENVEOF
 
       # ── 7. Деплой: rsync сборки + .env ────────────────────────────────────
+      - name: Ensure rsync on server
+        run: |
+          ssh -i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT || 22 }} \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "apt-get install -y rsync 2>/dev/null || true"
+
       - name: Upload build
         run: |
           SSH_OPTS="-i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT || 22 }}"
