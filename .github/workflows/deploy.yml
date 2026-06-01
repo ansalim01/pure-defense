@@ -64,40 +64,36 @@ jobs:
           } > /tmp/app.env
 
       # ── 7. Деплой: rsync сборки + .env ────────────────────────────────────
-      - name: Ensure rsync on server
-        run: |
-          ssh -i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT || 22 }} \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "apt-get install -y rsync 2>/dev/null || true"
-
       - name: Upload build
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
         run: |
-          SSH_OPTS="-i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT || 22 }}"
+          ssh -i ~/.ssh/id_deploy -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
+            "apt-get install -y rsync -qq && mkdir -p /var/www/pure-defense/.output"
 
-          # Создаём папку если не существует
-          ssh $SSH_OPTS ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "mkdir -p ${{ env.APP_DIR }}/.output"
-
-          # Копируем .output/ (--delete убирает устаревшие файлы)
           rsync -az --delete \
-            -e "ssh $SSH_OPTS" \
+            -e "ssh -i ~/.ssh/id_deploy -p ${SSH_PORT}" \
             .output/ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.APP_DIR }}/.output/
+            "${SSH_USER}@${SSH_HOST}:/var/www/pure-defense/.output/"
 
-          # Копируем .env
-          scp $SSH_OPTS \
+          scp -i ~/.ssh/id_deploy -P "${SSH_PORT}" \
             /tmp/app.env \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.APP_DIR }}/.output/.env
+            "${SSH_USER}@${SSH_HOST}:/var/www/pure-defense/.output/.env"
 
       # ── 8. Перезапуск pm2 ─────────────────────────────────────────────────
       - name: Restart app
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || 22 }}
         run: |
-          ssh -i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT || 22 }} \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+          ssh -i ~/.ssh/id_deploy -p "${SSH_PORT}" "${SSH_USER}@${SSH_HOST}" \
             "pm2 restart pure-defense 2>/dev/null \
-              || pm2 start ${{ env.APP_DIR }}/.output/server/index.mjs \
+              || pm2 start /var/www/pure-defense/.output/server/index.mjs \
                    --name pure-defense \
-                   --cwd ${{ env.APP_DIR }}/.output \
+                   --cwd /var/www/pure-defense/.output \
                    --update-env \
              && pm2 save"
 
