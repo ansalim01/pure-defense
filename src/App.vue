@@ -1,0 +1,786 @@
+<script setup>
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import heroImage from './assets/images/hero-main.png'
+import serviceBedbugImage from './assets/images/service-bedbug.png'
+import serviceCockroachImage from './assets/images/service-cockroach.png'
+import serviceDisinfectionImage from './assets/images/service-disinfection.png'
+import serviceMoldImage from './assets/images/service-mold.png'
+import serviceRatImage from './assets/images/service-rat.png'
+import AppIcon from './components/AppIcon.vue'
+import DistrictMap from './components/DistrictMap.vue'
+import ProtectionScene from './components/ProtectionScene.vue'
+import { company } from './data/company'
+
+const navigation = [
+  { label: 'Услуги', href: '#services' },
+  { label: 'Как мы работаем', href: '#process' },
+  { label: 'Отзывы', href: '#reviews' },
+  { label: 'Вопросы', href: '#faq' },
+  { label: 'Контакты', href: '#contacts' },
+]
+
+const heroFacts = [
+  'Гарантия до 1 года',
+  'Безопасно для детей и животных',
+  'Выезд за 1 час',
+  'Работаем официально',
+]
+
+const heroHighlights = [
+  {
+    icon: 'beaker',
+    title: 'Эффективные препараты',
+    text: 'Сертифицированы',
+  },
+  {
+    icon: 'leaf',
+    title: 'Безопасно для людей',
+    text: 'И домашних животных',
+  },
+  {
+    icon: 'shield',
+    title: 'Гарантия результата',
+    text: 'До 12 месяцев',
+  },
+]
+
+const services = [
+  {
+    icon: 'bug',
+    theme: 'amber',
+    title: 'Уничтожение тараканов',
+    subtitle: 'Кухни, санузлы, кафе, общежития',
+    price: 'от 2000 ₽',
+    image: serviceCockroachImage,
+    alt: 'Таракан крупным планом на белом фоне',
+    position: 'center center',
+  },
+  {
+    icon: 'bed',
+    theme: 'sand',
+    title: 'Уничтожение клопов',
+    subtitle: 'Квартиры, гостиницы и спальные зоны',
+    price: 'от 2500 ₽',
+    image: serviceBedbugImage,
+    alt: 'Постельные клопы крупным планом на ткани',
+    position: 'center center',
+  },
+  {
+    icon: 'rat',
+    theme: 'stone',
+    title: 'Дератизация',
+    subtitle: 'Крысы, мыши, подвалы, склады',
+    price: 'от 3500 ₽',
+    image: serviceRatImage,
+    alt: 'Крыса на светлом фоне',
+    position: 'center center',
+  },
+  {
+    icon: 'spray',
+    theme: 'sky',
+    title: 'Дезинфекция помещений',
+    subtitle: 'После арендаторов, ремонта и ЧП',
+    price: 'от 1500 ₽',
+    image: serviceDisinfectionImage,
+    alt: 'Специалист проводит обработку помещения у окна',
+    position: 'center center',
+  },
+  {
+    icon: 'mold',
+    theme: 'sage',
+    title: 'Удаление плесени',
+    subtitle: 'Стены, откосы, санузлы и балконы',
+    price: 'от 1200 ₽',
+    image: serviceMoldImage,
+    alt: 'Плесень в углу стены возле плинтуса',
+    position: 'center center',
+  },
+]
+
+const advantages = [
+  {
+    icon: 'document',
+    title: 'Работаем официально',
+    text: 'Заключаем договор и выдаём все документы.',
+  },
+  {
+    icon: 'beaker',
+    title: 'Сертифицированные препараты',
+    text: 'Используем проверенные профессиональные составы.',
+  },
+  {
+    icon: 'leaf',
+    title: 'Безопасно для детей и животных',
+    text: 'Подбираем схему обработки под условия помещения.',
+  },
+  {
+    icon: 'clock',
+    title: 'Выезд за 1 час',
+    text: 'Быстро приезжаем по Казани и ближайшим районам.',
+  },
+  {
+    icon: 'repeat',
+    title: 'Гарантия до 12 месяцев',
+    text: 'При необходимости проводим повторный выезд.',
+  },
+  {
+    icon: 'users',
+    title: 'Опыт более 5 лет',
+    text: 'Работаем с квартирами, домами и коммерцией.',
+  },
+]
+
+const steps = [
+  {
+    icon: 'phone',
+    title: 'Вы оставляете заявку',
+    text: 'Позвоните или оставьте заявку на сайте.',
+  },
+  {
+    icon: 'headset',
+    title: 'Консультация',
+    text: 'Уточняем детали и рассчитываем стоимость.',
+  },
+  {
+    icon: 'car',
+    title: 'Выезд специалиста',
+    text: 'Приезжаем в удобное для вас время.',
+  },
+  {
+    icon: 'spray',
+    title: 'Проведение обработки',
+    text: 'Проводим безопасную и эффективную обработку.',
+  },
+  {
+    icon: 'shield-check',
+    title: 'Результат и гарантия',
+    text: 'Вы получаете чистоту, спокойствие и гарантию.',
+  },
+]
+
+const reviews = [
+  {
+    name: 'Клиент Avito · февраль 2025',
+    text: 'После первой обработки клопы перестали беспокоить. Всё подробно объяснили, вежливо общались и качественно выполнили работу.',
+  },
+  {
+    name: 'Клиент Avito · ноябрь 2024',
+    text: 'Специалисты приехали в удобное время, провели обработку от тараканов и потом были на связи. После повторной процедуры проблема ушла.',
+  },
+  {
+    name: 'Клиент Avito · февраль 2024',
+    text: 'Приехали вовремя, ждать не пришлось, всё прошло спокойно и даже составили договор. Впечатление осталось хорошее.',
+  },
+  {
+    name: 'Клиент Avito · декабрь 2023',
+    text: 'Стоимость обсудили заранее, специалист всё доступно объяснил и аккуратно выполнил обработку. На вопросы ответили без спешки.',
+  },
+]
+
+const faqs = [
+  {
+    question: 'Безопасно ли это для детей и животных?',
+    answer:
+      'Да. Используем препараты, которые рассчитаны на бытовое применение профессионалами. После обработки даём понятную инструкцию по проветриванию и возвращению в помещение.',
+  },
+  {
+    question: 'Нужно ли покидать квартиру на время обработки?',
+    answer:
+      'Обычно да, на 2-4 часа в зависимости от выбранного метода и типа вредителя. Точные рекомендации специалист озвучит до выезда.',
+  },
+  {
+    question: 'Будет ли неприятный запах после обработки?',
+    answer:
+      'Сильного стойкого запаха не остаётся. Современные препараты выветриваются быстро, особенно при соблюдении рекомендаций по проветриванию.',
+  },
+  {
+    question: 'Сколько длится обработка?',
+    answer:
+      'В среднем от 30 минут до 1,5 часов. Время зависит от площади, степени заражения и выбранного способа обработки.',
+  },
+  {
+    question: 'Когда будет виден результат?',
+    answer:
+      'Первые результаты обычно заметны в тот же день. Полный эффект наступает постепенно, когда препарат срабатывает по всей колонии.',
+  },
+  {
+    question: 'Как долго сохраняется эффект?',
+    answer:
+      'Остаточный барьер держится от нескольких недель до нескольких месяцев. Для сложных случаев рекомендуем закрепляющую обработку и гарантию.',
+  },
+]
+
+const districts = [
+  'Вахитовский район',
+  'Приволжский район',
+  'Советский район',
+  'Ново-Савиновский район',
+  'Авиастроительный район',
+  'Московский район',
+  'Кировский район',
+  'Лаишевский район',
+  'Высокогорский район',
+  'и другие районы области',
+]
+
+const districtColumns = [districts.slice(0, 5), districts.slice(5)]
+const faqsWithIndex = faqs.map((faq, index) => ({ ...faq, index }))
+const faqColumns = [faqsWithIndex.slice(0, 3), faqsWithIndex.slice(3)]
+const mobileMenuBreakpoint = 1040
+
+const openedFaq = ref(0)
+const reviewOffset = ref(0)
+const isMenuOpen = ref(false)
+
+const visibleReviews = computed(() =>
+  Array.from({ length: Math.min(3, reviews.length) }, (_, i) => reviews[(reviewOffset.value + i) % reviews.length]),
+)
+
+const initialCountdown = { hours: '02', minutes: '47', seconds: '33' }
+const countdown = ref({ ...initialCountdown })
+const heroBackgroundStyle = { '--hero-image': `url(${heroImage})` }
+
+const heroForm = reactive({ name: '', phone: '', loading: false, success: false, error: '' })
+const contactForm = reactive({ phone: '', loading: false, success: false, error: '' })
+
+let offerEndsAt = 0
+let countdownTimer
+let mediaQuery
+
+function toggleFaq(index) {
+  openedFaq.value = openedFaq.value === index ? -1 : index
+}
+
+function shiftReviews(direction) {
+  const total = reviews.length
+  reviewOffset.value = (reviewOffset.value + direction + total) % total
+}
+
+function closeMenu() {
+  isMenuOpen.value = false
+}
+
+function toggleMenu() {
+  isMenuOpen.value = !isMenuOpen.value
+}
+
+function getCountdown() {
+  if (!offerEndsAt) return { ...initialCountdown }
+  const diff = Math.max(offerEndsAt - Date.now(), 0)
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+  const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+  return {
+    hours: String(hours).padStart(2, '0'),
+    minutes: String(minutes).padStart(2, '0'),
+    seconds: String(seconds).padStart(2, '0'),
+  }
+}
+
+async function submitHeroForm() {
+  if (heroForm.loading) return
+  heroForm.loading = true
+  heroForm.error = ''
+  try {
+    await $fetch('/api/lead', {
+      method: 'POST',
+      body: { name: heroForm.name, phone: heroForm.phone },
+    })
+    heroForm.success = true
+    heroForm.name = ''
+    heroForm.phone = ''
+  } catch {
+    heroForm.error = 'Ошибка отправки. Позвоните нам напрямую.'
+  } finally {
+    heroForm.loading = false
+  }
+}
+
+async function submitContactForm() {
+  if (contactForm.loading) return
+  contactForm.loading = true
+  contactForm.error = ''
+  try {
+    await $fetch('/api/lead', {
+      method: 'POST',
+      body: { phone: contactForm.phone },
+    })
+    contactForm.success = true
+    contactForm.phone = ''
+  } catch {
+    contactForm.error = 'Ошибка отправки. Позвоните нам напрямую.'
+  } finally {
+    contactForm.loading = false
+  }
+}
+
+onMounted(() => {
+  const stored = sessionStorage.getItem('offer-ends-at')
+  offerEndsAt = stored ? Number(stored) : Date.now() + (2 * 60 * 60 + 47 * 60 + 33) * 1000
+  if (!stored) sessionStorage.setItem('offer-ends-at', String(offerEndsAt))
+
+  countdown.value = getCountdown()
+  countdownTimer = window.setInterval(() => {
+    countdown.value = getCountdown()
+  }, 1000)
+
+  mediaQuery = window.matchMedia(`(min-width: ${mobileMenuBreakpoint + 1}px)`)
+  mediaQuery.addEventListener('change', closeMenu)
+})
+
+onBeforeUnmount(() => {
+  window.clearInterval(countdownTimer)
+  mediaQuery?.removeEventListener('change', closeMenu)
+})
+</script>
+
+<template>
+  <div class="page">
+    <header class="header">
+      <div class="container header__inner">
+        <a class="brand" href="#hero" aria-label="Чистая Защита">
+          <span class="brand__mark">
+            <AppIcon name="logo" :size="26" />
+          </span>
+          <span class="brand__copy">
+            <strong>{{ company.brand }}</strong>
+            <small>{{ company.subtitle }}</small>
+          </span>
+        </a>
+
+        <a class="header__phone-quick" :href="company.phoneHref" aria-label="Позвонить">
+          <AppIcon name="phone" :size="20" />
+        </a>
+
+        <button
+          class="menu-toggle"
+          type="button"
+          :aria-expanded="isMenuOpen"
+          aria-controls="site-navigation"
+          :aria-label="isMenuOpen ? 'Закрыть меню' : 'Открыть меню'"
+          @click="toggleMenu"
+        >
+          <AppIcon :name="isMenuOpen ? 'close' : 'menu'" :size="22" />
+        </button>
+
+        <nav id="site-navigation" class="nav" :class="{ 'nav--open': isMenuOpen }" aria-label="Основная навигация">
+          <a v-for="item in navigation" :key="item.href" :href="item.href" @click="closeMenu">
+            {{ item.label }}
+          </a>
+        </nav>
+
+        <div class="header__cta" :class="{ 'header__cta--open': isMenuOpen }">
+          <div class="header__contact">
+            <a class="header__phone" :href="company.phoneHref">{{ company.phoneDisplay }}</a>
+            <span class="header__hours">{{ company.workingHours }}</span>
+          </div>
+          <a class="button button--ghost button--small" href="#contacts" @click="closeMenu">Перезвоните мне</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section id="hero" class="hero">
+        <div class="container hero__grid" :style="heroBackgroundStyle">
+          <div class="hero__content">
+            <h1 class="hero__title">
+              <span class="hero__title-line">Уничтожим тараканов, клопов</span>
+              <span class="hero__title-line hero__title-line--compact">
+                и других вредителей <span>в&nbsp;Казани</span>
+              </span>
+            </h1>
+            <div class="hero__meta" aria-label="Преимущества">
+              <span v-for="fact in heroFacts" :key="fact">{{ fact }}</span>
+            </div>
+            <p class="hero__lead">
+              Проводим дезинсекцию, дератизацию, дезинфекцию и удаление плесени в квартирах,
+              домах и коммерческих помещениях по Казани и области.
+            </p>
+
+            <div class="hero__highlights">
+              <article v-for="item in heroHighlights" :key="item.title" class="hero-highlight">
+                <span class="hero-highlight__icon">
+                  <AppIcon :name="item.icon" :size="24" />
+                </span>
+                <div>
+                  <h3>{{ item.title }}</h3>
+                  <p>{{ item.text }}</p>
+                </div>
+              </article>
+            </div>
+
+            <div class="hero__actions">
+              <a class="button button--primary" :href="company.phoneHref">
+                <AppIcon name="phone" :size="18" />
+                Позвонить сейчас
+              </a>
+            </div>
+          </div>
+
+          <div class="hero__stage">
+            <form class="hero-form" @submit.prevent="submitHeroForm">
+              <h2>Получите <span>бесплатную консультацию</span></h2>
+
+              <div v-if="heroForm.success" class="form-success">
+                <AppIcon name="check" :size="20" />
+                Заявка принята! Перезвоним в ближайшее время.
+              </div>
+
+              <template v-else>
+                <label class="visually-hidden" for="hero-name">Ваше имя</label>
+                <input
+                  id="hero-name"
+                  v-model="heroForm.name"
+                  type="text"
+                  name="name"
+                  placeholder="Ваше имя"
+                  autocomplete="name"
+                  :disabled="heroForm.loading"
+                />
+                <label class="visually-hidden" for="hero-phone">Телефон</label>
+                <input
+                  id="hero-phone"
+                  v-model="heroForm.phone"
+                  type="tel"
+                  name="phone"
+                  placeholder="Телефон"
+                  autocomplete="tel"
+                  inputmode="tel"
+                  required
+                  :disabled="heroForm.loading"
+                />
+                <button class="button button--primary button--block" type="submit" :disabled="heroForm.loading">
+                  {{ heroForm.loading ? 'Отправляем...' : 'Оставить заявку' }}
+                </button>
+                <p v-if="heroForm.error" class="form-error">{{ heroForm.error }}</p>
+                <p v-else class="hero-form__note">
+                  <AppIcon name="lock" :size="16" />
+                  Ваши данные защищены
+                </p>
+              </template>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="services" class="section">
+        <div class="container">
+          <div class="section-heading section-heading--center">
+            <p>Основные направления</p>
+            <h2>Наши услуги</h2>
+          </div>
+
+          <div class="service-grid">
+            <article v-for="service in services" :key="service.title" class="service-card">
+              <div class="service-card__media" :class="`service-card__media--${service.theme}`">
+                <img
+                  class="service-card__image"
+                  :src="service.image"
+                  :alt="service.alt"
+                  :style="{ objectPosition: service.position }"
+                  loading="lazy"
+                />
+                <div class="service-card__placeholder">
+                  <span class="service-card__placeholder-icon">
+                    <AppIcon :name="service.icon" :size="50" />
+                  </span>
+                </div>
+              </div>
+              <div class="service-card__body">
+                <h3>{{ service.title }}</h3>
+                <p>{{ service.subtitle }}</p>
+                <strong>{{ service.price }}</strong>
+                <a class="button button--line button--small" href="#contacts">Заказать</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--compact">
+        <div class="container">
+          <div class="section-heading section-heading--center">
+            <p>Почему выбирают нас</p>
+            <h2>Решаем проблему под ключ</h2>
+          </div>
+
+          <div class="advantage-panel">
+            <article v-for="item in advantages" :key="item.title" class="advantage-card">
+              <span class="advantage-card__icon">
+                <AppIcon :name="item.icon" :size="30" />
+              </span>
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.text }}</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="process" class="section section--compact">
+        <div class="container">
+          <div class="section-heading section-heading--center">
+            <p>Прозрачный процесс</p>
+            <h2>Как мы работаем</h2>
+          </div>
+
+          <div class="steps-grid">
+            <article v-for="(step, index) in steps" :key="step.title" class="step-card">
+              <div class="step-card__visual">
+                <span class="step-card__index">{{ index + 1 }}</span>
+                <span class="step-card__icon">
+                  <AppIcon :name="step.icon" :size="30" />
+                </span>
+              </div>
+              <div class="step-card__content">
+                <h3>{{ step.title }}</h3>
+                <p>{{ step.text }}</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="reviews" class="section section--compact">
+        <div class="container">
+          <div class="section-heading section-heading--center section-heading--with-actions">
+            <div>
+              <p>Отзывы с Avito</p>
+              <h2>Отзывы наших клиентов</h2>
+            </div>
+
+            <div class="review-controls" aria-label="Управление отзывами">
+              <button type="button" aria-label="Показать предыдущие отзывы" @click="shiftReviews(-1)">
+                <AppIcon name="arrow-left" :size="18" />
+              </button>
+              <button type="button" aria-label="Показать следующие отзывы" @click="shiftReviews(1)">
+                <AppIcon name="arrow-right" :size="18" />
+              </button>
+            </div>
+          </div>
+
+          <div class="review-grid">
+            <article v-for="review in visibleReviews" :key="review.name" class="review-card">
+              <div class="review-card__scene" aria-hidden="true">
+                <ProtectionScene />
+              </div>
+              <div class="review-card__body">
+                <h3>{{ review.name }}</h3>
+                <div class="review-card__stars" aria-hidden="true">
+                  <AppIcon v-for="star in 5" :key="star" name="star" :size="14" />
+                </div>
+                <p>{{ review.text }}</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" class="section section--compact">
+        <div class="container">
+          <div class="section-heading section-heading--center">
+            <p>Частые вопросы</p>
+            <h2>Часто задаваемые вопросы</h2>
+          </div>
+
+          <div class="faq-grid">
+            <div v-for="(column, columnIndex) in faqColumns" :key="columnIndex" class="faq-column">
+              <article
+                v-for="item in column"
+                :key="item.question"
+                class="faq-item"
+                :class="{ 'faq-item--open': openedFaq === item.index }"
+              >
+                <button
+                  type="button"
+                  class="faq-item__button"
+                  :aria-expanded="openedFaq === item.index"
+                  @click="toggleFaq(item.index)"
+                >
+                  <span class="faq-item__label">
+                    <AppIcon name="help" :size="18" />
+                    {{ item.question }}
+                  </span>
+                  <AppIcon name="chevron" :size="18" />
+                </button>
+                <p v-if="openedFaq === item.index" class="faq-item__answer">
+                  {{ item.answer }}
+                </p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contacts" class="section section--compact">
+        <div class="container contact-grid">
+          <form class="contact-card" @submit.prevent="submitContactForm">
+            <div class="section-heading section-heading--left">
+              <p>Быстрый контакт</p>
+              <h2>Остались вопросы? Мы перезвоним!</h2>
+            </div>
+
+            <p class="contact-card__text">
+              Работаем официально как {{ company.legalName }}. Для связи используйте
+              <a class="text-link" :href="company.phoneHref">{{ company.phoneDisplay }}</a>
+              или
+              <a class="text-link" :href="company.emailHref">{{ company.email }}</a>.
+            </p>
+
+            <div v-if="contactForm.success" class="form-success" style="margin-top: 22px;">
+              <AppIcon name="check" :size="20" />
+              Спасибо! Перезвоним в ближайшее время.
+            </div>
+
+            <div v-else class="contact-card__form">
+              <label class="visually-hidden" for="lead-phone">Ваш телефон</label>
+              <input
+                id="lead-phone"
+                v-model="contactForm.phone"
+                type="tel"
+                name="lead-phone"
+                placeholder="Ваш телефон"
+                autocomplete="tel"
+                inputmode="tel"
+                required
+                :disabled="contactForm.loading"
+              />
+              <button class="button button--primary" type="submit" :disabled="contactForm.loading">
+                <AppIcon name="phone" :size="18" />
+                {{ contactForm.loading ? 'Отправляем...' : 'Перезвоните мне' }}
+              </button>
+            </div>
+
+            <p v-if="contactForm.error" class="form-error">{{ contactForm.error }}</p>
+
+            <div class="contact-card__features">
+              <span><AppIcon name="check" :size="16" /> ИНН {{ company.inn }}</span>
+              <span><AppIcon name="check" :size="16" /> ОГРНИП {{ company.ogrnip }}</span>
+              <span><AppIcon name="check" :size="16" /> БИК {{ company.bik }}</span>
+            </div>
+          </form>
+
+          <article class="coverage-card">
+            <div class="section-heading section-heading--left">
+              <p>География выезда</p>
+              <h2>Работаем по Казани и области</h2>
+            </div>
+
+            <div class="coverage-card__content">
+              <div class="coverage-card__list">
+                <ul v-for="(column, index) in districtColumns" :key="index">
+                  <li v-for="item in column" :key="item">
+                    <AppIcon name="pin" :size="16" />
+                    {{ item }}
+                  </li>
+                </ul>
+              </div>
+
+              <div class="coverage-card__map">
+                <DistrictMap />
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section--compact section--bottom-space">
+        <div class="container">
+          <div class="discount-banner">
+            <div class="discount-banner__text">
+              <p>Скидка 20% на обработку сегодня!</p>
+              <span>Оставьте заявку прямо сейчас и получите скидку на все услуги.</span>
+            </div>
+
+            <div class="discount-banner__timer" aria-label="Таймер акции">
+              <div>
+                <strong>{{ countdown.hours }}</strong>
+                <span>часов</span>
+              </div>
+              <div>
+                <strong>{{ countdown.minutes }}</strong>
+                <span>минут</span>
+              </div>
+              <div>
+                <strong>{{ countdown.seconds }}</strong>
+                <span>секунд</span>
+              </div>
+            </div>
+
+            <a class="button button--danger" href="#contacts">Получить скидку</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer__grid">
+        <div class="footer__brand">
+          <a class="brand brand--footer" href="#hero">
+            <span class="brand__mark">
+              <AppIcon name="logo" :size="26" />
+            </span>
+            <span class="brand__copy">
+              <strong>{{ company.brand }}</strong>
+              <small>{{ company.subtitle }}</small>
+            </span>
+          </a>
+
+          <p>
+            Исполнитель услуг: {{ company.legalName }}. Работаем официально, заключаем договор и предоставляем
+            реквизиты по запросу.
+          </p>
+        </div>
+
+        <div class="footer__links">
+          <h3>Услуги</h3>
+          <a href="#services">Уничтожение тараканов</a>
+          <a href="#services">Уничтожение клопов</a>
+          <a href="#services">Дератизация</a>
+          <a href="#services">Дезинфекция помещений</a>
+          <a href="#services">Удаление плесени</a>
+        </div>
+
+        <div class="footer__links">
+          <h3>Компания</h3>
+          <a href="#hero">О нас</a>
+          <a href="#process">Как мы работаем</a>
+          <a href="#reviews">Отзывы</a>
+          <a href="#faq">Вопросы и ответы</a>
+          <a href="#contacts">Контакты</a>
+        </div>
+
+        <address class="footer__contacts">
+          <h3>Контакты</h3>
+          <a :href="company.phoneHref">{{ company.phoneDisplay }}</a>
+          <a :href="company.emailHref">{{ company.email }}</a>
+          <a :href="company.mapsHref" target="_blank" rel="noopener noreferrer">{{ company.address }}</a>
+          <small>{{ company.legalName }}</small>
+          <small>ИНН {{ company.inn }} • ОГРНИП {{ company.ogrnip }}</small>
+          <small>р/с {{ company.checkingAccount }}</small>
+          <small>к/с {{ company.correspondentAccount }} • БИК {{ company.bik }}</small>
+        </address>
+      </div>
+
+      <div class="container footer__bottom">
+        <span>© {{ new Date().getFullYear() }} {{ company.brand }} / {{ company.legalName }}</span>
+        <NuxtLink to="/privacy">Политика конфиденциальности</NuxtLink>
+      </div>
+    </footer>
+
+    <div class="mobile-cta" aria-label="Быстрые действия">
+      <a class="mobile-cta__call" :href="company.phoneHref">
+        <span class="mobile-cta__call-icon">
+          <AppIcon name="phone" :size="20" />
+        </span>
+        <span class="mobile-cta__call-label">
+          <strong>Позвонить сейчас</strong>
+          <small>{{ company.phoneDisplay }}</small>
+        </span>
+      </a>
+      <a class="mobile-cta__form" href="#contacts">
+        <AppIcon name="message" :size="15" />
+        Оставить заявку
+      </a>
+    </div>
+  </div>
+</template>
