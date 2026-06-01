@@ -1,0 +1,111 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+
+env:
+  APP_DIR: /var/www/pure-defense
+  NODE_VERSION: '22'
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Код ────────────────────────────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── 2. Node.js с кешем npm ────────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      # ── 3. Зависимости ────────────────────────────────────────────────────
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 4. Сборка ─────────────────────────────────────────────────────────
+      - name: Build
+        run: npm run build
+        env:
+          NUXT_PUBLIC_SITE_URL: ${{ secrets.NUXT_PUBLIC_SITE_URL }}
+
+      # ── 5. SSH-ключ ───────────────────────────────────────────────────────
+      - name: Prepare SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -p ${{ secrets.SSH_PORT || 22 }} -H "${{ secrets.SSH_HOST }}" \
+            >> ~/.ssh/known_hosts
+
+      # ── 6. .env на сервере из GitHub Secrets ──────────────────────────────
+      - name: Write .env
+        run: |
+          cat > /tmp/app.env << 'ENVEOF'
+          TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
+          NUXT_PUBLIC_SITE_URL=${{ secrets.NUXT_PUBLIC_SITE_URL }}
+          ENVEOF
+
+      # ── 7. Деплой: rsync сборки + .env ────────────────────────────────────
+      - name: Upload build
+        run: |
+          SSH_OPTS="-i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT || 22 }}"
+
+          # Создаём папку если не существует
+          ssh $SSH_OPTS ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "mkdir -p ${{ env.APP_DIR }}/.output"
+
+          # Копируем .output/ (--delete убирает устаревшие файлы)
+          rsync -az --delete \
+            -e "ssh $SSH_OPTS" \
+            .output/ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.APP_DIR }}/.output/
+
+          # Копируем .env
+          scp $SSH_OPTS \
+            /tmp/app.env \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ env.APP_DIR }}/.output/.env
+
+      # ── 8. Перезапуск pm2 ─────────────────────────────────────────────────
+      - name: Restart app
+        run: |
+          ssh -i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT || 22 }} \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "pm2 restart pure-defense 2>/dev/null \
+              || pm2 start ${{ env.APP_DIR }}/.output/server/index.mjs \
+                   --name pure-defense \
+                   --cwd ${{ env.APP_DIR }}/.output \
+                   --update-env \
+             && pm2 save"
+
+      # ── 9. Telegram: успех ────────────────────────────────────────────────
+      - name: Notify success
+        if: success()
+        run: |
+          COMMIT_MSG=$(git log -1 --format="%h %s")
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "parse_mode=Markdown" \
+            --data-urlencode "text=✅ *Деплой успешен — Чистая Защита*
+
+Коммит: \`${COMMIT_MSG}\`
+Ветка: \`${{ github.ref_name }}\`"
+
+      # ── 10. Telegram: ошибка ──────────────────────────────────────────────
+      - name: Notify failure
+        if: failure()
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "parse_mode=Markdown" \
+            --data-urlencode "text=❌ *Деплой упал — Чистая Защита*
+
+Ветка: \`${{ github.ref_name }}\`
+[Открыть лог](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
