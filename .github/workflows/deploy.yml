@@ -35,7 +35,11 @@ jobs:
         env:
           NUXT_PUBLIC_SITE_URL: ${{ secrets.NUXT_PUBLIC_SITE_URL }}
 
-      # ── 5. SSH-ключ ───────────────────────────────────────────────────────
+      # ── 5. rsync ──────────────────────────────────────────────────────────
+      - name: Install rsync
+        run: sudo apt-get install -y rsync
+
+      # ── 6. SSH-ключ ───────────────────────────────────────────────────────
       - name: Prepare SSH
         env:
           SSH_KEY: ${{ secrets.SSH_KEY }}
