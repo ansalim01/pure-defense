@@ -80,7 +80,10 @@ jobs:
           SSH_PORT: ${{ secrets.SSH_PORT }}
         run: |
           ssh -i ~/.ssh/id_deploy -p "${SSH_PORT:-22}" "${SSH_USER}@${SSH_HOST}" \
-            "export NVM_DIR=/root/.nvm && . /root/.nvm/nvm.sh && (pm2 restart pure-defense 2>/dev/null || pm2 start /var/www/pure-defense/.output/server/index.mjs --name pure-defense --cwd /var/www/pure-defense/.output --update-env) && pm2 save"
+            "cd /var/www/pure-defense && \
+            set -a && . .output/.env && set +a && \
+            (pm2 restart pure-defense --update-env 2>/dev/null || pm2 start .output/server/index.mjs --name pure-defense --update-env) && \
+            pm2 save"
 
       - name: Notify success
         if: success()
