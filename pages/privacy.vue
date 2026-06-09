@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { company } from '~/src/data/company'
+import AppHeader from '~/src/components/AppHeader.vue'
 
 const runtimeConfig = useRuntimeConfig()
 const requestUrl = useRequestURL()
@@ -25,9 +26,8 @@ useHead({
 
 <template>
   <div class="legal-page">
+    <AppHeader />
     <div class="container">
-      <NuxtLink class="legal-back" to="/">На главную</NuxtLink>
-
       <article class="legal-card">
         <div class="section-heading section-heading--left">
           <p>Документы</p>

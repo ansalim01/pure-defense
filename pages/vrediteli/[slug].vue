@@ -5,6 +5,7 @@ import serviceBedbugImage from '~/src/assets/images/service-bedbug.png'
 import serviceRatImage from '~/src/assets/images/service-rat.png'
 import serviceMoldImage from '~/src/assets/images/service-mold.png'
 import serviceDisinfectionImage from '~/src/assets/images/service-disinfection.png'
+import AppHeader from '~/src/components/AppHeader.vue'
 import AppIcon from '~/src/components/AppIcon.vue'
 import { company, siteMeta } from '~/src/data/company'
 import { findPest, pests } from '~/src/data/pests'
@@ -142,27 +143,7 @@ async function submitForm() {
 
 <template>
   <div class="pest-page">
-    <header class="pest-header">
-      <div class="container pest-header__inner">
-        <NuxtLink class="brand" to="/" aria-label="Чистая Защита — на главную">
-          <span class="brand__mark">
-            <AppIcon name="logo" :size="26" />
-          </span>
-          <span class="brand__copy">
-            <strong>{{ company.brand }}</strong>
-            <small>{{ company.subtitle }}</small>
-          </span>
-        </NuxtLink>
-
-        <div class="pest-header__actions">
-          <NuxtLink class="pest-header__back" to="/">← Главная</NuxtLink>
-          <a class="button button--primary button--small" :href="company.phoneHref">
-            <AppIcon name="phone" :size="16" />
-            Позвонить
-          </a>
-        </div>
-      </div>
-    </header>
+    <AppHeader />
 
     <main>
       <nav class="breadcrumb" aria-label="Навигация по сайту">
@@ -428,40 +409,6 @@ async function submitForm() {
   background: var(--bg, #f4f7fb);
 }
 
-/* ── Header ── */
-.pest-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  background: var(--navy-950);
-  border-bottom: 1px solid rgba(255 255 255 / 0.06);
-}
-
-.pest-header__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  height: 64px;
-}
-
-.pest-header__actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.pest-header__back {
-  color: rgba(255 255 255 / 0.7);
-  text-decoration: none;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  transition: color 0.2s;
-}
-
-.pest-header__back:hover {
-  color: #fff;
-}
 
 /* ── Breadcrumb ── */
 .breadcrumb {
@@ -819,8 +766,18 @@ async function submitForm() {
 }
 
 @media (max-width: 540px) {
-  .pest-header__back {
-    display: none;
+  .pest-hero__actions {
+    flex-direction: column;
+  }
+
+  .pest-hero__actions .button {
+    width: 100%;
+    min-height: 52px;
+  }
+
+  .pest-hero__facts span {
+    font-size: 0.78rem;
+    padding: 5px 12px;
   }
 
   .other-pests-grid {

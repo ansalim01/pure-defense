@@ -1,14 +1,20 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
+import logoImage from './assets/images/logo.png'
 import heroImage from './assets/images/hero-main.png'
 import serviceBedbugImage from './assets/images/service-bedbug.png'
 import serviceCockroachImage from './assets/images/service-cockroach.png'
 import serviceDisinfectionImage from './assets/images/service-disinfection.png'
 import serviceMoldImage from './assets/images/service-mold.png'
 import serviceRatImage from './assets/images/service-rat.png'
+import workImage from './assets/images/work.png'
+import workImage2 from './assets/images/work02.png'
+import workImage3 from './assets/images/wokr03.png'
+
+const workImages = [workImage, workImage2, workImage3]
+import AppHeader from './components/AppHeader.vue'
 import AppIcon from './components/AppIcon.vue'
 import DistrictMap from './components/DistrictMap.vue'
-import ProtectionScene from './components/ProtectionScene.vue'
 import { company } from './data/company'
 
 const navigation = [
@@ -40,7 +46,7 @@ const heroHighlights = [
   {
     icon: 'shield',
     title: 'Гарантия результата',
-    text: 'До 12 месяцев',
+    text: 'До 1 года',
   },
 ]
 
@@ -135,7 +141,7 @@ const advantages = [
   },
   {
     icon: 'repeat',
-    title: 'Гарантия до 12 месяцев',
+    title: 'Гарантия до 1 года',
     text: 'При необходимости проводим повторный выезд.',
   },
   {
@@ -241,26 +247,17 @@ const districts = [
 const districtColumns = [districts.slice(0, 5), districts.slice(5)]
 const faqsWithIndex = faqs.map((faq, index) => ({ ...faq, index }))
 const faqColumns = [faqsWithIndex.slice(0, 3), faqsWithIndex.slice(3)]
-const mobileMenuBreakpoint = 1040
-
 const openedFaq = ref(0)
 const reviewOffset = ref(0)
-const isMenuOpen = ref(false)
 
 const visibleReviews = computed(() =>
   Array.from({ length: Math.min(3, reviews.length) }, (_, i) => reviews[(reviewOffset.value + i) % reviews.length]),
 )
 
-const initialCountdown = { hours: '02', minutes: '47', seconds: '33' }
-const countdown = ref({ ...initialCountdown })
 const heroBackgroundStyle = { '--hero-image': `url(${heroImage})` }
 
 const heroForm = reactive({ name: '', phone: '', loading: false, success: false, error: '' })
 const contactForm = reactive({ phone: '', loading: false, success: false, error: '' })
-
-let offerEndsAt = 0
-let countdownTimer
-let mediaQuery
 
 function toggleFaq(index) {
   openedFaq.value = openedFaq.value === index ? -1 : index
@@ -269,27 +266,6 @@ function toggleFaq(index) {
 function shiftReviews(direction) {
   const total = reviews.length
   reviewOffset.value = (reviewOffset.value + direction + total) % total
-}
-
-function closeMenu() {
-  isMenuOpen.value = false
-}
-
-function toggleMenu() {
-  isMenuOpen.value = !isMenuOpen.value
-}
-
-function getCountdown() {
-  if (!offerEndsAt) return { ...initialCountdown }
-  const diff = Math.max(offerEndsAt - Date.now(), 0)
-  const hours = Math.floor(diff / (1000 * 60 * 60))
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000)
-  return {
-    hours: String(hours).padStart(2, '0'),
-    minutes: String(minutes).padStart(2, '0'),
-    seconds: String(seconds).padStart(2, '0'),
-  }
 }
 
 async function submitHeroForm() {
@@ -329,70 +305,11 @@ async function submitContactForm() {
   }
 }
 
-onMounted(() => {
-  const stored = sessionStorage.getItem('offer-ends-at')
-  offerEndsAt = stored ? Number(stored) : Date.now() + (2 * 60 * 60 + 47 * 60 + 33) * 1000
-  if (!stored) sessionStorage.setItem('offer-ends-at', String(offerEndsAt))
-
-  countdown.value = getCountdown()
-  countdownTimer = window.setInterval(() => {
-    countdown.value = getCountdown()
-  }, 1000)
-
-  mediaQuery = window.matchMedia(`(min-width: ${mobileMenuBreakpoint + 1}px)`)
-  mediaQuery.addEventListener('change', closeMenu)
-})
-
-onBeforeUnmount(() => {
-  window.clearInterval(countdownTimer)
-  mediaQuery?.removeEventListener('change', closeMenu)
-})
 </script>
 
 <template>
   <div class="page">
-    <header class="header">
-      <div class="container header__inner">
-        <a class="brand" href="#hero" aria-label="Чистая Защита">
-          <span class="brand__mark">
-            <AppIcon name="logo" :size="26" />
-          </span>
-          <span class="brand__copy">
-            <strong>{{ company.brand }}</strong>
-            <small>{{ company.subtitle }}</small>
-          </span>
-        </a>
-
-        <a class="header__phone-quick" :href="company.phoneHref" aria-label="Позвонить">
-          <AppIcon name="phone" :size="20" />
-        </a>
-
-        <button
-          class="menu-toggle"
-          type="button"
-          :aria-expanded="isMenuOpen"
-          aria-controls="site-navigation"
-          :aria-label="isMenuOpen ? 'Закрыть меню' : 'Открыть меню'"
-          @click="toggleMenu"
-        >
-          <AppIcon :name="isMenuOpen ? 'close' : 'menu'" :size="22" />
-        </button>
-
-        <nav id="site-navigation" class="nav" :class="{ 'nav--open': isMenuOpen }" aria-label="Основная навигация">
-          <a v-for="item in navigation" :key="item.href" :href="item.href" @click="closeMenu">
-            {{ item.label }}
-          </a>
-        </nav>
-
-        <div class="header__cta" :class="{ 'header__cta--open': isMenuOpen }">
-          <div class="header__contact">
-            <a class="header__phone" :href="company.phoneHref">{{ company.phoneDisplay }}</a>
-            <span class="header__hours">{{ company.workingHours }}</span>
-          </div>
-          <a class="button button--ghost button--small" href="#contacts" @click="closeMenu">Перезвоните мне</a>
-        </div>
-      </div>
-    </header>
+    <AppHeader />
 
     <main id="main-content">
       <section id="hero" class="hero">
@@ -529,8 +446,10 @@ onBeforeUnmount(() => {
               <span class="advantage-card__icon">
                 <AppIcon :name="item.icon" :size="30" />
               </span>
-              <h3>{{ item.title }}</h3>
-              <p>{{ item.text }}</p>
+              <div class="advantage-card__body">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.text }}</p>
+              </div>
             </article>
           </div>
         </div>
@@ -570,18 +489,23 @@ onBeforeUnmount(() => {
 
             <div class="review-controls" aria-label="Управление отзывами">
               <button type="button" aria-label="Показать предыдущие отзывы" @click="shiftReviews(-1)">
-                <AppIcon name="arrow-left" :size="18" />
+                <AppIcon name="arrow-left" :size="22" />
               </button>
               <button type="button" aria-label="Показать следующие отзывы" @click="shiftReviews(1)">
-                <AppIcon name="arrow-right" :size="18" />
+                <AppIcon name="arrow-right" :size="22" />
               </button>
             </div>
           </div>
 
           <div class="review-grid">
-            <article v-for="review in visibleReviews" :key="review.name" class="review-card">
+            <article v-for="(review, i) in visibleReviews" :key="review.name" class="review-card">
               <div class="review-card__scene" aria-hidden="true">
-                <ProtectionScene />
+                <img :src="workImages[(reviewOffset + i) % 3]" alt="" class="review-card__scene-img" />
+                <div class="review-card__scene-overlay"></div>
+                <div class="review-card__scene-badge">
+                  <AppIcon name="shield-check" :size="18" />
+                  Проверено
+                </div>
               </div>
               <div class="review-card__body">
                 <h3>{{ review.name }}</h3>
@@ -703,42 +627,13 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <section class="section section--compact section--bottom-space">
-        <div class="container">
-          <div class="discount-banner">
-            <div class="discount-banner__text">
-              <p>Скидка 20% на обработку сегодня!</p>
-              <span>Оставьте заявку прямо сейчас и получите скидку на все услуги.</span>
-            </div>
-
-            <div class="discount-banner__timer" aria-label="Таймер акции">
-              <div>
-                <strong>{{ countdown.hours }}</strong>
-                <span>часов</span>
-              </div>
-              <div>
-                <strong>{{ countdown.minutes }}</strong>
-                <span>минут</span>
-              </div>
-              <div>
-                <strong>{{ countdown.seconds }}</strong>
-                <span>секунд</span>
-              </div>
-            </div>
-
-            <a class="button button--danger" href="#contacts">Получить скидку</a>
-          </div>
-        </div>
-      </section>
     </main>
 
     <footer class="footer">
       <div class="container footer__grid">
         <div class="footer__brand">
           <a class="brand brand--footer" href="#hero">
-            <span class="brand__mark">
-              <AppIcon name="logo" :size="26" />
-            </span>
+            <img :src="logoImage" alt="" aria-hidden="true" height="48" style="width: auto; display: block;" />
             <span class="brand__copy">
               <strong>{{ company.brand }}</strong>
               <small>{{ company.subtitle }}</small>
