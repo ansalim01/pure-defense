@@ -144,6 +144,7 @@ section[id] {
 #app,
 #__nuxt {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 .page {
@@ -2048,19 +2049,9 @@ section[id] {
     min-height: 52px;
   }
 
+  /* Hero form hidden on mobile — mobile-cta "Оставить заявку" serves same purpose */
   .hero__stage {
-    padding-top: 2px;
-  }
-
-  .hero-form {
-    max-width: none;
-    padding: 20px 18px 18px;
-    border-radius: 20px;
-    gap: 12px;
-  }
-
-  .hero-form h2 {
-    font-size: 1.62rem;
+    display: none;
   }
 
   .section {
@@ -2389,7 +2380,8 @@ section[id] {
   }
 
   .footer {
-    padding: 34px 0 152px;
+    /* 152px = approx mobile-cta height; safe-area-inset-bottom adds iPhone home indicator */
+    padding: 34px 0 calc(152px + env(safe-area-inset-bottom, 0px));
   }
 
   .footer__grid {
@@ -2441,7 +2433,8 @@ section[id] {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+    /* max() ensures minimum breathing room even when safe-area-inset-bottom=0 (Android/Telegram) */
+    padding: 14px 16px max(20px, calc(14px + env(safe-area-inset-bottom, 0px)));
     background: var(--white);
     border-radius: 24px 24px 0 0;
     box-shadow: 0 -8px 40px rgba(8, 21, 43, 0.13);
