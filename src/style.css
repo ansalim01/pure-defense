@@ -37,6 +37,9 @@
 
 html {
   scroll-behavior: smooth;
+  /* Telegram WebView / iOS Safari: prevent layout shift from address bar */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -46,6 +49,9 @@ body {
     radial-gradient(circle at top left, rgba(97, 194, 68, 0.06), transparent 24%),
     linear-gradient(180deg, #f8fafc 0%, #f2f6fa 100%);
   color: #24364d;
+  /* Prevent horizontal scroll / body bounce in Telegram WebView */
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
 }
 
 body,
@@ -56,18 +62,27 @@ textarea {
   font-family: inherit;
 }
 
-/* iOS Safari: reset native input styling */
+/* iOS Safari / Telegram WebView: reset native input styling */
 input,
 textarea,
 select {
   -webkit-appearance: none;
   appearance: none;
+  /* font-size ≥ 16px prevents iOS/Telegram WebView from auto-zooming on focus */
+  font-size: max(1rem, 16px);
 }
 
 button {
   -webkit-appearance: none;
   appearance: none;
   cursor: pointer;
+}
+
+/* Remove tap flash on all interactive elements (Safari/Telegram WebView) */
+a,
+button,
+[role='button'] {
+  -webkit-tap-highlight-color: transparent;
 }
 
 img,
@@ -301,6 +316,7 @@ section[id] {
 }
 
 .header {
+  position: -webkit-sticky; /* Safari < 13 / older Telegram WebView */
   position: sticky;
   top: 0;
   z-index: 20;
@@ -922,7 +938,8 @@ section[id] {
   border: 1px solid rgba(34, 51, 76, 0.12);
   background: var(--white);
   color: var(--navy-900);
-  font-size: 0.98rem;
+  /* Keep 1rem (16px) — prevents auto-zoom in Telegram WebView / iOS Safari */
+  font-size: 1rem;
 }
 
 .hero-form__note {
@@ -2478,34 +2495,17 @@ section[id] {
     opacity: 0.82;
   }
 
-  .mobile-cta__secondary {
-    display: flex;
-    gap: 2px;
-  }
-
-  .mobile-cta__tg,
   .mobile-cta__form {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    flex: 1;
+    gap: 7px;
     min-height: 40px;
     color: var(--slate-700);
-    font-size: 0.88rem;
+    font-size: 0.9rem;
     font-weight: 600;
     text-decoration: none;
-    border-radius: 10px;
-    transition: background 0.15s, color 0.15s;
-  }
-
-  .mobile-cta__tg {
-    color: #229ed9; /* Telegram blue */
-  }
-
-  .mobile-cta__tg:active,
-  .mobile-cta__form:active {
-    background: rgba(0, 0, 0, 0.05);
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
