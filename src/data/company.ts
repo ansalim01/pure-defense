@@ -20,6 +20,7 @@ export const company = {
   bik: '044525974',
   mapsHref:
     'https://yandex.ru/maps/?text=%D0%B3.%20%D0%9A%D0%B0%D0%B7%D0%B0%D0%BD%D1%8C%2C%20%D1%83%D0%BB.%20%D0%A4%D1%80%D1%83%D0%BD%D0%B7%D0%B5%2C%20%D0%B4.%205%2C%20%D0%BA%D0%B2.%208',
+  telegramHref: 'https://t.me/chistaya_zashita_kzn', // ← замените на ваш реальный @username
   avitoProfile:
     'https://www.avito.ru/user/553bc2e0ab3d190c73160dbb7651b764/profile/all?src=sharing&sellerId=553bc2e0ab3d190c73160dbb7651b764',
 }

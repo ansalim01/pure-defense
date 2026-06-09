@@ -78,6 +78,7 @@ function goHome() {
   color: transparent;
   background: linear-gradient(135deg, var(--green-500) 0%, #3da826 100%);
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; /* Safari requires this for gradient text */
   background-clip: text;
   letter-spacing: -0.04em;
   user-select: none;

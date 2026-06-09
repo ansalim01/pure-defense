@@ -667,6 +667,7 @@ async function submitContactForm() {
         <address class="footer__contacts">
           <h3>Контакты</h3>
           <a :href="company.phoneHref">{{ company.phoneDisplay }}</a>
+          <a :href="company.telegramHref" target="_blank" rel="noopener noreferrer">Telegram</a>
           <a :href="company.emailHref">{{ company.email }}</a>
           <a :href="company.mapsHref" target="_blank" rel="noopener noreferrer">{{ company.address }}</a>
           <small>{{ company.legalName }}</small>
@@ -692,10 +693,16 @@ async function submitContactForm() {
           <small>{{ company.phoneDisplay }}</small>
         </span>
       </a>
-      <a class="mobile-cta__form" href="#contacts">
-        <AppIcon name="message" :size="15" />
-        Оставить заявку
-      </a>
+      <div class="mobile-cta__secondary">
+        <a class="mobile-cta__tg" :href="company.telegramHref" target="_blank" rel="noopener noreferrer" aria-label="Написать в Telegram">
+          <AppIcon name="telegram" :size="18" />
+          Telegram
+        </a>
+        <a class="mobile-cta__form" href="#contacts">
+          <AppIcon name="message" :size="15" />
+          Заявка
+        </a>
+      </div>
     </div>
   </div>
 </template>

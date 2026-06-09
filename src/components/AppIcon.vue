@@ -143,6 +143,10 @@ const paths = {
   close: `
     <path d="m6 6 12 12M18 6 6 18" />
   `,
+  telegram: `
+    <path d="M22 2L2 9.5l7.5 3L17 7l-6.5 7 3 6.5L22 2Z" />
+    <path d="m9.5 12.5 3 4 2-3" />
+  `,
 }
 
 const iconMarkup = computed(() => paths[props.name] ?? paths.shield)

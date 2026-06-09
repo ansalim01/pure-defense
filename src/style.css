@@ -56,6 +56,20 @@ textarea {
   font-family: inherit;
 }
 
+/* iOS Safari: reset native input styling */
+input,
+textarea,
+select {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+button {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
 img,
 svg {
   display: block;
@@ -290,9 +304,13 @@ section[id] {
   position: sticky;
   top: 0;
   z-index: 20;
+  -webkit-backdrop-filter: blur(18px); /* Safari */
   backdrop-filter: blur(18px);
   background: rgba(255, 255, 255, 0.88);
   border-bottom: 1px solid rgba(34, 51, 76, 0.06);
+  /* Force GPU layer on iOS for smooth sticky scroll */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .menu-backdrop {
@@ -1656,11 +1674,12 @@ section[id] {
     gap: 8px;
     grid-column: 1 / -1;
     width: 100%;
-    max-height: calc(100dvh - 76px);
+    max-height: calc(100vh - 76px);   /* fallback for old Safari */
+    max-height: calc(100dvh - 76px);  /* modern: excludes browser chrome */
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* momentum scroll on iOS */
     overscroll-behavior: contain;
     padding-bottom: 20px;
-    /* hide scrollbar visually but keep functionality */
     scrollbar-width: none;
   }
   .menu-body::-webkit-scrollbar { display: none; }
@@ -2459,16 +2478,34 @@ section[id] {
     opacity: 0.82;
   }
 
+  .mobile-cta__secondary {
+    display: flex;
+    gap: 2px;
+  }
+
+  .mobile-cta__tg,
   .mobile-cta__form {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+    gap: 6px;
+    flex: 1;
     min-height: 40px;
     color: var(--slate-700);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 600;
     text-decoration: none;
+    border-radius: 10px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .mobile-cta__tg {
+    color: #229ed9; /* Telegram blue */
+  }
+
+  .mobile-cta__tg:active,
+  .mobile-cta__form:active {
+    background: rgba(0, 0, 0, 0.05);
   }
 }
 
