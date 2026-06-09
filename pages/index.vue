@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import heroImage from '~/src/assets/images/hero-main.png'
+import heroImage from '~/src/assets/images/hero-main.jpg'
 import SiteApp from '~/src/App.vue'
 import { company, seoFaqs, seoReviews, seoServices, siteMeta } from '~/src/data/company'
 

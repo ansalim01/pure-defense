@@ -1,5 +1,5 @@
 <script setup>
-import districtMapImage from '../assets/images/image.png'
+import districtMapImage from '../assets/images/image.jpg'
 </script>
 
 <template>
