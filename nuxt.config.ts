@@ -1,5 +1,24 @@
 export default defineNuxtConfig({
   ssr: true,
+  routeRules: {
+    '/': { prerender: true },
+    '/vrediteli/**': { prerender: true },
+    '/privacy': { prerender: true },
+  },
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: [
+        '/',
+        '/vrediteli/tarakany',
+        '/vrediteli/klopy',
+        '/vrediteli/krysy',
+        '/vrediteli/pleseni',
+        '/vrediteli/dezinfekciya',
+        '/privacy',
+      ],
+    },
+  },
   css: [
     '@fontsource/manrope/cyrillic-400.css',
     '@fontsource/manrope/cyrillic-600.css',
