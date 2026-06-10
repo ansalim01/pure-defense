@@ -4,6 +4,7 @@ import logoImage from '../assets/images/logo.png'
 import AppIcon from './AppIcon.vue'
 import { company } from '../data/company'
 import { pests } from '../data/pests'
+const { trackGoal } = useMetrika()
 
 const navigation = [
   { label: 'Как мы работаем', href: '/#process' },
@@ -57,7 +58,7 @@ onBeforeUnmount(() => {
       </Teleport>
 
       <!-- Phone quick-dial + hamburger -->
-      <a class="header__phone-quick" :href="company.phoneHref" aria-label="Позвонить">
+      <a class="header__phone-quick" :href="company.phoneHref" aria-label="Позвонить" @click="trackGoal('phone_click')">
         <AppIcon name="phone" :size="20" />
       </a>
 
@@ -81,7 +82,7 @@ onBeforeUnmount(() => {
       <!-- Desktop CTA -->
       <div class="header__cta">
         <div class="header__contact">
-          <a class="header__phone" :href="company.phoneHref">{{ company.phoneDisplay }}</a>
+          <a class="header__phone" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
           <span class="header__hours">{{ company.workingHours }}</span>
         </div>
         <a class="button button--ghost button--small" href="/#contacts">Перезвоните мне</a>
@@ -114,7 +115,7 @@ onBeforeUnmount(() => {
 
           <div class="header__cta header__cta--open">
             <div class="header__contact">
-              <a class="header__phone" :href="company.phoneHref">{{ company.phoneDisplay }}</a>
+              <a class="header__phone" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
               <span class="header__hours">{{ company.workingHours }}</span>
             </div>
             <a class="button button--ghost button--small" href="/#contacts" @click="closeMenu">Перезвоните мне</a>

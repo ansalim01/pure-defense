@@ -3,6 +3,7 @@ import { computed, reactive, ref } from 'vue'
 import { useTelegramWebApp } from '~/composables/useTelegramWebApp'
 
 const { openExternalLink } = useTelegramWebApp()
+const { trackGoal } = useMetrika()
 import logoImage from './assets/images/logo.png'
 import heroImage from './assets/images/hero-main.jpg'
 import serviceBedbugImage from './assets/images/service-bedbug.jpg'
@@ -283,6 +284,7 @@ async function submitHeroForm() {
     heroForm.success = true
     heroForm.name = ''
     heroForm.phone = ''
+    trackGoal('form_submit')
   } catch {
     heroForm.error = 'Ошибка отправки. Позвоните нам напрямую.'
   } finally {
@@ -301,6 +303,7 @@ async function submitContactForm() {
     })
     contactForm.success = true
     contactForm.phone = ''
+    trackGoal('form_submit')
   } catch {
     contactForm.error = 'Ошибка отправки. Позвоните нам напрямую.'
   } finally {
@@ -345,7 +348,7 @@ async function submitContactForm() {
             </div>
 
             <div class="hero__actions">
-              <a class="button button--primary" :href="company.phoneHref">
+              <a class="button button--primary" :href="company.phoneHref" @click="trackGoal('phone_click')">
                 <AppIcon name="phone" :size="18" />
                 Позвонить сейчас
               </a>
@@ -568,7 +571,7 @@ async function submitContactForm() {
 
             <p class="contact-card__text">
               Работаем официально как {{ company.legalName }}. Для связи используйте
-              <a class="text-link" :href="company.phoneHref">{{ company.phoneDisplay }}</a>
+              <a class="text-link" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
               или
               <a class="text-link" :href="company.emailHref">{{ company.email }}</a>.
             </p>
@@ -669,7 +672,7 @@ async function submitContactForm() {
 
         <address class="footer__contacts">
           <h3>Контакты</h3>
-          <a :href="company.phoneHref">{{ company.phoneDisplay }}</a>
+          <a :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
           <a :href="company.emailHref">{{ company.email }}</a>
           <a :href="company.mapsHref" target="_blank" rel="noopener noreferrer" @click.prevent="openExternalLink(company.mapsHref)">{{ company.address }}</a>
           <small>{{ company.legalName }}</small>
@@ -686,7 +689,7 @@ async function submitContactForm() {
     </footer>
 
     <div class="mobile-cta" aria-label="Быстрые действия">
-      <a class="mobile-cta__call" :href="company.phoneHref">
+      <a class="mobile-cta__call" :href="company.phoneHref" @click="trackGoal('phone_click')">
         <span class="mobile-cta__call-icon">
           <AppIcon name="phone" :size="20" />
         </span>

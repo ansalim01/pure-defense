@@ -1,5 +1,6 @@
 <script setup>
 import { computed, reactive, ref } from 'vue'
+const { trackGoal } = useMetrika()
 import serviceCockroachImage from '~/src/assets/images/service-cockroach.jpg'
 import serviceBedbugImage from '~/src/assets/images/service-bedbug.jpg'
 import serviceRatImage from '~/src/assets/images/service-rat.jpg'
@@ -145,6 +146,7 @@ async function submitForm() {
     await $fetch('/api/lead', { method: 'POST', body: { phone: form.phone, service: pest.title } })
     form.success = true
     form.phone = ''
+    trackGoal('form_submit')
   } catch {
     form.error = 'Ошибка отправки. Позвоните нам напрямую.'
   } finally {
@@ -179,7 +181,7 @@ async function submitForm() {
               <span>Официально</span>
             </div>
             <div class="pest-hero__actions">
-              <a class="button button--primary" :href="company.phoneHref">
+              <a class="button button--primary" :href="company.phoneHref" @click="trackGoal('phone_click')">
                 <AppIcon name="phone" :size="18" />
                 Позвонить сейчас
               </a>
@@ -329,7 +331,7 @@ async function submitForm() {
                 {{ pest.title }} · {{ pest.price }} · Выезд за 1 час · Гарантия {{ pest.guarantee }}
               </p>
               <div class="pest-cta-block__contacts">
-                <a class="pest-cta-block__phone" :href="company.phoneHref">{{ company.phoneDisplay }}</a>
+                <a class="pest-cta-block__phone" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
                 <span class="pest-cta-block__hours">{{ company.workingHours }}</span>
               </div>
             </div>
@@ -390,13 +392,13 @@ async function submitForm() {
     <footer class="pest-footer">
       <div class="container pest-footer__inner">
         <span>© {{ new Date().getFullYear() }} {{ company.brand }} / {{ company.legalName }}</span>
-        <a :href="company.phoneHref">{{ company.phoneDisplay }}</a>
+        <a :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
         <NuxtLink to="/">На главную</NuxtLink>
       </div>
     </footer>
 
     <div class="mobile-cta" aria-label="Быстрые действия">
-      <a class="mobile-cta__call" :href="company.phoneHref">
+      <a class="mobile-cta__call" :href="company.phoneHref" @click="trackGoal('phone_click')">
         <span class="mobile-cta__call-icon">
           <AppIcon name="phone" :size="20" />
         </span>
