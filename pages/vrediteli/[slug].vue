@@ -37,6 +37,16 @@ const canonicalUrl = computed(() => `${siteOrigin.value}/vrediteli/${pest.slug}`
 const homeUrl = computed(() => `${siteOrigin.value}/`)
 const ogImageUrl = computed(() => new URL(pestImage, siteOrigin.value).toString())
 
+// Image dimensions after compression (480px wide, height varies by image)
+const ogImageDimensions = {
+  cockroach:     { width: '480', height: '480' },
+  bedbug:        { width: '480', height: '338' },
+  rat:           { width: '480', height: '319' },
+  mold:          { width: '480', height: '360' },
+  disinfection:  { width: '480', height: '320' },
+}
+const ogDims = ogImageDimensions[pest.imageKey] ?? { width: '480', height: '360' }
+
 const structuredData = computed(() => ({
   '@context': 'https://schema.org',
   '@graph': [
@@ -97,6 +107,8 @@ useServerSeoMeta({
   ogUrl: canonicalUrl,
   ogImage: ogImageUrl,
   ogImageAlt: pest.imageAlt,
+  ogImageWidth: ogDims.width,
+  ogImageHeight: ogDims.height,
   twitterCard: 'summary_large_image',
   twitterTitle: pest.metaTitle,
   twitterDescription: pest.metaDesc,

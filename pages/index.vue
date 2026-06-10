@@ -59,6 +59,19 @@ const structuredData = computed(() => ({
         addressRegion: company.region,
         addressCountry: company.countryCode,
       },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: '55.796391',
+        longitude: '49.108891',
+      },
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+          opens: '00:00',
+          closes: '23:59',
+        },
+      ],
       contactPoint: [
         {
           '@type': 'ContactPoint',

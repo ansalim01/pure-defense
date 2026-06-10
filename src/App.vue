@@ -503,7 +503,7 @@ async function submitContactForm() {
           <div class="review-grid">
             <article v-for="(review, i) in visibleReviews" :key="review.name" class="review-card">
               <div class="review-card__scene" aria-hidden="true">
-                <img :src="workImages[(reviewOffset + i) % 3]" alt="" class="review-card__scene-img" />
+                <img :src="workImages[(reviewOffset + i) % 3]" alt="" class="review-card__scene-img" loading="lazy" width="900" height="600" />
                 <div class="review-card__scene-overlay"></div>
                 <div class="review-card__scene-badge">
                   <AppIcon name="shield-check" :size="18" />
