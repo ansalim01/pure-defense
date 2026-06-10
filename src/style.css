@@ -335,15 +335,22 @@ section[id] {
 .menu-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 31;
+  /* 55 > mobile-cta (50) so backdrop covers it when burger menu opens */
+  z-index: 55;
   background: rgba(8, 20, 42, 0.52);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
 }
 
-/* Header sits above mobile-cta (z-index 30) when burger menu is open */
+/* Header sits above backdrop (55) when burger menu is open */
 .header--open {
-  z-index: 40;
+  z-index: 60;
+}
+
+/* Telegram WebApp: plugin adds .is-telegram to <html> via classList.add() */
+.is-telegram .header {
+  /* Telegram already renders its own top chrome, don't offset for safe-area-top */
+  top: 0;
 }
 
 .backdrop-enter-active,
@@ -1964,6 +1971,12 @@ section[id] {
 }
 
 @media (max-width: 720px) {
+  /* Body padding-bottom clears the floating mobile-cta on all pages
+     (main page, vrediteli/[slug], etc.) — replaces per-footer hacks */
+  body {
+    padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+  }
+
   .container {
     width: min(100% - 16px, 100%);
   }
@@ -2383,8 +2396,8 @@ section[id] {
   }
 
   .footer {
-    /* 152px = approx mobile-cta height; safe-area-inset-bottom adds iPhone home indicator */
-    padding: 34px 0 calc(152px + env(safe-area-inset-bottom, 0px));
+    /* body { padding-bottom } now handles clearance above mobile-cta */
+    padding: 34px 0 26px;
   }
 
   .footer__grid {
@@ -2429,19 +2442,18 @@ section[id] {
 
   .mobile-cta {
     position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 30;
+    /* Floating style: 12px from screen edges, above safe-area */
+    left: 12px;
+    right: 12px;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 50;
     display: flex;
     flex-direction: column;
     gap: 2px;
-    /* max() ensures minimum breathing room even when safe-area-inset-bottom=0 (Android/Telegram) */
-    padding: 14px 16px max(20px, calc(14px + env(safe-area-inset-bottom, 0px)));
+    padding: 12px 14px;
     background: var(--white);
-    border-radius: 24px 24px 0 0;
-    box-shadow: 0 -8px 40px rgba(8, 21, 43, 0.13);
-    border-top: 1px solid rgba(34, 51, 76, 0.06);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(8, 21, 43, 0.18), 0 2px 8px rgba(8, 21, 43, 0.06);
   }
 
   .mobile-cta__call {

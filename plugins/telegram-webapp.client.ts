@@ -26,7 +26,11 @@ export default defineNuxtPlugin(() => {
   //    and updates env(safe-area-inset-bottom) accordingly
   tg.expand()
 
-  // 3. Sync --tg-vh CSS variable with the actual stable viewport height
+  // 3. Mark document so CSS can apply Telegram-specific overrides
+  //    e.g. .is-telegram .header { top: 0 } or .is-telegram .mobile-cta { ... }
+  document.documentElement.classList.add('is-telegram')
+
+  // 4. Sync --tg-vh CSS variable with the actual stable viewport height
   function updateVh(): void {
     // viewportStableHeight = height without keyboard; viewportHeight = current height
     const h: number = tg.viewportStableHeight || tg.viewportHeight || window.innerHeight
