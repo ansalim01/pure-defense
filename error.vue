@@ -48,6 +48,7 @@ function goHome() {
 <style scoped>
 .error-page {
   min-height: 100dvh;
+  min-height: var(--tg-vh, 100dvh);
   display: flex;
   flex-direction: column;
   background: var(--bg);

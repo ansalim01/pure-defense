@@ -1,5 +1,8 @@
 <script setup>
 import { computed, reactive, ref } from 'vue'
+import { useTelegramWebApp } from '~/composables/useTelegramWebApp'
+
+const { openExternalLink } = useTelegramWebApp()
 import logoImage from './assets/images/logo.png'
 import heroImage from './assets/images/hero-main.jpg'
 import serviceBedbugImage from './assets/images/service-bedbug.jpg'
@@ -668,7 +671,7 @@ async function submitContactForm() {
           <h3>Контакты</h3>
           <a :href="company.phoneHref">{{ company.phoneDisplay }}</a>
           <a :href="company.emailHref">{{ company.email }}</a>
-          <a :href="company.mapsHref" target="_blank" rel="noopener noreferrer">{{ company.address }}</a>
+          <a :href="company.mapsHref" target="_blank" rel="noopener noreferrer" @click.prevent="openExternalLink(company.mapsHref)">{{ company.address }}</a>
           <small>{{ company.legalName }}</small>
           <small>ИНН {{ company.inn }} • ОГРНИП {{ company.ogrnip }}</small>
           <small>р/с {{ company.checkingAccount }}</small>

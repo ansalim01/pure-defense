@@ -145,6 +145,8 @@ section[id] {
 #__nuxt {
   min-height: 100vh;
   min-height: 100dvh;
+  /* Telegram WebApp: plugin sets --tg-vh to the real stable viewport height */
+  min-height: var(--tg-vh, 100dvh);
 }
 
 .page {
@@ -1692,8 +1694,9 @@ section[id] {
     gap: 8px;
     grid-column: 1 / -1;
     width: 100%;
-    max-height: calc(100vh - 76px);   /* fallback for old Safari */
-    max-height: calc(100dvh - 76px);  /* modern: excludes browser chrome */
+    max-height: calc(100vh - 76px);              /* fallback for old Safari */
+    max-height: calc(100dvh - 76px);             /* modern: excludes browser chrome */
+    max-height: calc(var(--tg-vh, 100dvh) - 76px); /* Telegram WebApp: exact stable height */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch; /* momentum scroll on iOS */
     overscroll-behavior: contain;
