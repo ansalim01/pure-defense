@@ -137,12 +137,15 @@ function toggleFaq(index) {
   openedFaq.value = openedFaq.value === index ? -1 : index
 }
 
-const form = reactive({ phone: '', loading: false, success: false, error: '' })
+const form = reactive({ phone: '', loading: false, success: false, error: '', touched: false })
 const { isValidPhone } = usePhoneValidation()
+const phoneInvalid = computed(() => form.touched && form.phone.length > 0 && !isValidPhone(form.phone))
+
 async function submitForm() {
   if (form.loading) return
+  form.touched = true
   if (!isValidPhone(form.phone)) {
-    form.error = 'Введите корректный номер телефона'
+    form.error = 'Введите корректный номер: +7 (900) 000-00-00'
     return
   }
   form.loading = true
@@ -151,6 +154,7 @@ async function submitForm() {
     await $fetch('/api/lead', { method: 'POST', body: { phone: form.phone, service: pest.title } })
     form.success = true
     form.phone = ''
+    form.touched = false
     trackGoal('form_submit')
   } catch {
     form.error = 'Ошибка отправки. Позвоните нам напрямую.'
@@ -370,13 +374,15 @@ async function submitForm() {
                   id="pest-phone"
                   v-model="form.phone"
                   type="tel"
-                  placeholder="Ваш телефон"
+                  placeholder="+7 (900) 000-00-00"
                   autocomplete="tel"
                   inputmode="tel"
-                  required
+                  :class="{ 'input--error': phoneInvalid }"
                   :disabled="form.loading"
+                  @blur="form.touched = true"
+                  @input="form.error = ''"
                 />
-                <button class="button button--primary button--block" type="submit" :disabled="form.loading">
+                <button class="button button--primary button--block" type="submit" :disabled="form.loading || !form.phone.trim()">
                   <AppIcon name="phone" :size="18" />
                   {{ form.loading ? 'Отправляем...' : 'Перезвоните мне' }}
                 </button>

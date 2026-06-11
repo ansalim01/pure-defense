@@ -260,9 +260,12 @@ const visibleReviews = computed(() =>
 
 const heroBackgroundStyle = { '--hero-image': `url(${heroImage})` }
 
-const heroForm = reactive({ phone: '', loading: false, success: false, error: '' })
-const contactForm = reactive({ phone: '', loading: false, success: false, error: '' })
+const heroForm = reactive({ phone: '', loading: false, success: false, error: '', touched: false })
+const contactForm = reactive({ phone: '', loading: false, success: false, error: '', touched: false })
 const { isValidPhone } = usePhoneValidation()
+
+const heroPhoneInvalid = computed(() => heroForm.touched && heroForm.phone.length > 0 && !isValidPhone(heroForm.phone))
+const contactPhoneInvalid = computed(() => contactForm.touched && contactForm.phone.length > 0 && !isValidPhone(contactForm.phone))
 
 function toggleFaq(index) {
   openedFaq.value = openedFaq.value === index ? -1 : index
@@ -275,8 +278,9 @@ function shiftReviews(direction) {
 
 async function submitHeroForm() {
   if (heroForm.loading) return
+  heroForm.touched = true
   if (!isValidPhone(heroForm.phone)) {
-    heroForm.error = 'Введите корректный номер телефона'
+    heroForm.error = 'Введите корректный номер: +7 (900) 000-00-00'
     return
   }
   heroForm.loading = true
@@ -288,6 +292,7 @@ async function submitHeroForm() {
     })
     heroForm.success = true
     heroForm.phone = ''
+    heroForm.touched = false
     trackGoal('form_submit')
   } catch {
     heroForm.error = 'Ошибка отправки. Позвоните нам напрямую.'
@@ -298,8 +303,9 @@ async function submitHeroForm() {
 
 async function submitContactForm() {
   if (contactForm.loading) return
+  contactForm.touched = true
   if (!isValidPhone(contactForm.phone)) {
-    contactForm.error = 'Введите корректный номер телефона'
+    contactForm.error = 'Введите корректный номер: +7 (900) 000-00-00'
     return
   }
   contactForm.loading = true
@@ -311,6 +317,7 @@ async function submitContactForm() {
     })
     contactForm.success = true
     contactForm.phone = ''
+    contactForm.touched = false
     trackGoal('form_submit')
   } catch {
     contactForm.error = 'Ошибка отправки. Позвоните нам напрямую.'
@@ -379,13 +386,15 @@ async function submitContactForm() {
                   v-model="heroForm.phone"
                   type="tel"
                   name="phone"
-                  placeholder="Телефон"
+                  placeholder="+7 (900) 000-00-00"
                   autocomplete="tel"
                   inputmode="tel"
-                  required
+                  :class="{ 'input--error': heroPhoneInvalid }"
                   :disabled="heroForm.loading"
+                  @blur="heroForm.touched = true"
+                  @input="heroForm.error = ''"
                 />
-                <button class="button button--primary button--block" type="submit" :disabled="heroForm.loading">
+                <button class="button button--primary button--block" type="submit" :disabled="heroForm.loading || !heroForm.phone.trim()">
                   {{ heroForm.loading ? 'Отправляем...' : 'Оставить заявку' }}
                 </button>
                 <p v-if="heroForm.error" class="form-error">{{ heroForm.error }}</p>
@@ -586,13 +595,15 @@ async function submitContactForm() {
                 v-model="contactForm.phone"
                 type="tel"
                 name="lead-phone"
-                placeholder="Ваш телефон"
+                placeholder="+7 (900) 000-00-00"
                 autocomplete="tel"
                 inputmode="tel"
-                required
+                :class="{ 'input--error': contactPhoneInvalid }"
                 :disabled="contactForm.loading"
+                @blur="contactForm.touched = true"
+                @input="contactForm.error = ''"
               />
-              <button class="button button--primary" type="submit" :disabled="contactForm.loading">
+              <button class="button button--primary" type="submit" :disabled="contactForm.loading || !contactForm.phone.trim()">
                 <AppIcon name="phone" :size="18" />
                 {{ contactForm.loading ? 'Отправляем...' : 'Перезвоните мне' }}
               </button>

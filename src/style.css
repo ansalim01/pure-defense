@@ -2630,3 +2630,13 @@ section[id] {
   font-size: 0.92rem;
   text-align: center;
 }
+
+input.input--error {
+  border-color: #ea4032;
+  outline: none;
+}
+
+input.input--error:focus-visible {
+  outline: 3px solid rgba(234, 64, 50, 0.25);
+  outline-offset: 2px;
+}
