@@ -138,7 +138,7 @@ function toggleFaq(index) {
 }
 
 const form = reactive({ phone: '', loading: false, success: false, error: '', touched: false })
-const { isValidPhone } = usePhoneValidation()
+const { isValidPhone, formatPhone } = usePhoneValidation()
 const phoneInvalid = computed(() => form.touched && form.phone.length > 0 && !isValidPhone(form.phone))
 
 async function submitForm() {
@@ -372,7 +372,7 @@ async function submitForm() {
                 <label class="visually-hidden" for="pest-phone">Ваш телефон</label>
                 <input
                   id="pest-phone"
-                  v-model="form.phone"
+                  :value="form.phone"
                   type="tel"
                   placeholder="+7 (900) 000-00-00"
                   autocomplete="tel"
@@ -380,7 +380,7 @@ async function submitForm() {
                   :class="{ 'input--error': phoneInvalid }"
                   :disabled="form.loading"
                   @blur="form.touched = true"
-                  @input="form.error = ''"
+                  @input="form.phone = formatPhone($event.target.value); form.error = ''"
                 />
                 <button class="button button--primary button--block" type="submit" :disabled="form.loading || !form.phone.trim()">
                   <AppIcon name="phone" :size="18" />

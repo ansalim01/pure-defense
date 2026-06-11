@@ -262,7 +262,7 @@ const heroBackgroundStyle = { '--hero-image': `url(${heroImage})` }
 
 const heroForm = reactive({ phone: '', loading: false, success: false, error: '', touched: false })
 const contactForm = reactive({ phone: '', loading: false, success: false, error: '', touched: false })
-const { isValidPhone } = usePhoneValidation()
+const { isValidPhone, formatPhone } = usePhoneValidation()
 
 const heroPhoneInvalid = computed(() => heroForm.touched && heroForm.phone.length > 0 && !isValidPhone(heroForm.phone))
 const contactPhoneInvalid = computed(() => contactForm.touched && contactForm.phone.length > 0 && !isValidPhone(contactForm.phone))
@@ -383,7 +383,7 @@ async function submitContactForm() {
                 <label class="visually-hidden" for="hero-phone">Телефон</label>
                 <input
                   id="hero-phone"
-                  v-model="heroForm.phone"
+                  :value="heroForm.phone"
                   type="tel"
                   name="phone"
                   placeholder="+7 (900) 000-00-00"
@@ -392,7 +392,7 @@ async function submitContactForm() {
                   :class="{ 'input--error': heroPhoneInvalid }"
                   :disabled="heroForm.loading"
                   @blur="heroForm.touched = true"
-                  @input="heroForm.error = ''"
+                  @input="heroForm.phone = formatPhone($event.target.value); heroForm.error = ''"
                 />
                 <button class="button button--primary button--block" type="submit" :disabled="heroForm.loading || !heroForm.phone.trim()">
                   {{ heroForm.loading ? 'Отправляем...' : 'Оставить заявку' }}
@@ -592,7 +592,7 @@ async function submitContactForm() {
               <label class="visually-hidden" for="lead-phone">Ваш телефон</label>
               <input
                 id="lead-phone"
-                v-model="contactForm.phone"
+                :value="contactForm.phone"
                 type="tel"
                 name="lead-phone"
                 placeholder="+7 (900) 000-00-00"
@@ -601,7 +601,7 @@ async function submitContactForm() {
                 :class="{ 'input--error': contactPhoneInvalid }"
                 :disabled="contactForm.loading"
                 @blur="contactForm.touched = true"
-                @input="contactForm.error = ''"
+                @input="contactForm.phone = formatPhone($event.target.value); contactForm.error = ''"
               />
               <button class="button button--primary" type="submit" :disabled="contactForm.loading || !contactForm.phone.trim()">
                 <AppIcon name="phone" :size="18" />
