@@ -260,7 +260,7 @@ const visibleReviews = computed(() =>
 
 const heroBackgroundStyle = { '--hero-image': `url(${heroImage})` }
 
-const heroForm = reactive({ name: '', phone: '', loading: false, success: false, error: '' })
+const heroForm = reactive({ phone: '', loading: false, success: false, error: '' })
 const contactForm = reactive({ phone: '', loading: false, success: false, error: '' })
 
 function toggleFaq(index) {
@@ -279,10 +279,9 @@ async function submitHeroForm() {
   try {
     await $fetch('/api/lead', {
       method: 'POST',
-      body: { name: heroForm.name, phone: heroForm.phone },
+      body: { phone: heroForm.phone },
     })
     heroForm.success = true
-    heroForm.name = ''
     heroForm.phone = ''
     trackGoal('form_submit')
   } catch {
@@ -365,16 +364,6 @@ async function submitContactForm() {
               </div>
 
               <template v-else>
-                <label class="visually-hidden" for="hero-name">Ваше имя</label>
-                <input
-                  id="hero-name"
-                  v-model="heroForm.name"
-                  type="text"
-                  name="name"
-                  placeholder="Ваше имя"
-                  autocomplete="name"
-                  :disabled="heroForm.loading"
-                />
                 <label class="visually-hidden" for="hero-phone">Телефон</label>
                 <input
                   id="hero-phone"
