@@ -8,10 +8,10 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: 'Телефон обязателен' })
   }
 
-  const token = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_CHAT_ID
+  const workerUrl = process.env.CLOUDFLARE_WORKER_URL
+  const workerSecret = process.env.WORKER_SECRET
 
-  if (token && chatId) {
+  if (workerUrl && workerSecret) {
     const now = new Date().toLocaleString('ru-RU', {
       timeZone: 'Europe/Moscow',
       day: '2-digit',
@@ -21,21 +21,18 @@ export default defineEventHandler(async (event) => {
       minute: '2-digit',
     })
 
-    const lines = [
+    const text = [
       '🔔 *Новая заявка — Чистая Защита*',
       '',
       `📞 Телефон: \`${phone}\``,
       '',
       `🕐 ${now} МСК`,
-    ]
+    ].join('\n')
 
-    await $fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    await $fetch(workerUrl, {
       method: 'POST',
-      body: {
-        chat_id: chatId,
-        text: lines.join('\n'),
-        parse_mode: 'Markdown',
-      },
+      headers: { Authorization: `Bearer ${workerSecret}` },
+      body: { text },
     }).catch(console.error)
   }
 
