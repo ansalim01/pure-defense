@@ -214,6 +214,24 @@ async function submitForm() {
       </section>
 
       <section class="section section--compact">
+        <div class="container">
+          <div class="section-heading section-heading--left">
+            <p>Стоимость услуги</p>
+            <h2>Цены на {{ pest.nameGenitive }} в Казани</h2>
+          </div>
+          <table class="price-table">
+            <tbody>
+              <tr v-for="row in pest.priceTable" :key="row.label">
+                <td>{{ row.label }}</td>
+                <td class="price-table__price">{{ row.price }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="price-table__note">Точная стоимость определяется после осмотра. Выезд и консультация — бесплатно.</p>
+        </div>
+      </section>
+
+      <section class="section section--compact">
         <div class="container pest-info-grid">
           <article class="pest-panel pest-panel--signs">
             <h2>{{ pest.signsTitle }}</h2>
@@ -720,6 +738,41 @@ async function submitForm() {
 .other-pest-card span {
   font-size: 0.8125rem;
   color: var(--slate-700);
+}
+
+/* ── Price table ── */
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 0.9375rem;
+}
+
+.price-table tr {
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.price-table tr:last-child {
+  border-bottom: none;
+}
+
+.price-table td {
+  padding: 13px 0;
+  color: var(--navy-900);
+}
+
+.price-table__price {
+  text-align: right;
+  font-weight: 700;
+  color: var(--green-600);
+  white-space: nowrap;
+  padding-left: 16px;
+}
+
+.price-table__note {
+  margin-top: 14px;
+  font-size: 0.8125rem;
+  color: var(--slate-600);
 }
 
 /* ── Footer ── */
