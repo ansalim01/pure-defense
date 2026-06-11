@@ -50,11 +50,11 @@ jobs:
           WORKER_SECRET: ${{ secrets.WORKER_SECRET }}
         run: |
           {
-            echo "TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}"
-            echo "TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID}"
-            echo "NUXT_PUBLIC_SITE_URL=${NUXT_PUBLIC_SITE_URL}"
-            echo "CLOUDFLARE_WORKER_URL=${CLOUDFLARE_WORKER_URL}"
-            echo "WORKER_SECRET=${WORKER_SECRET}"
+            printf 'TELEGRAM_BOT_TOKEN=%q\n' "${TELEGRAM_BOT_TOKEN}"
+            printf 'TELEGRAM_CHAT_ID=%q\n' "${TELEGRAM_CHAT_ID}"
+            printf 'NUXT_PUBLIC_SITE_URL=%q\n' "${NUXT_PUBLIC_SITE_URL}"
+            printf 'CLOUDFLARE_WORKER_URL=%q\n' "${CLOUDFLARE_WORKER_URL}"
+            printf 'WORKER_SECRET=%q\n' "${WORKER_SECRET}"
           } > /tmp/app.env
 
       - name: Upload build
