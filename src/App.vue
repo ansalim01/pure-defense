@@ -616,6 +616,10 @@ async function submitContactForm() {
               <span><AppIcon name="check" :size="16" /> ОГРНИП {{ company.ogrnip }}</span>
               <span><AppIcon name="check" :size="16" /> БИК {{ company.bik }}</span>
             </div>
+            <a class="license-link" href="/license.jpg" target="_blank" rel="noopener">
+              <AppIcon name="shield-check" :size="16" />
+              Лицензия Роспотребнадзора № 12.РЦ.02.003.Л.000003.01.25
+            </a>
           </form>
 
           <article class="coverage-card">
@@ -693,7 +697,10 @@ async function submitContactForm() {
 
       <div class="container footer__bottom">
         <span>© {{ new Date().getFullYear() }} {{ company.brand }} / {{ company.legalName }}</span>
-        <NuxtLink to="/privacy">Политика конфиденциальности</NuxtLink>
+        <div class="footer__bottom-links">
+          <a href="/license.jpg" target="_blank" rel="noopener">Лицензия</a>
+          <NuxtLink to="/privacy">Политика конфиденциальности</NuxtLink>
+        </div>
       </div>
     </footer>
 
