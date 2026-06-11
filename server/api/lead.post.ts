@@ -1,9 +1,8 @@
-import { readBody, getRequestIP } from 'h3'
+import { readBody } from 'h3'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)
   const phone: string = (body?.phone ?? '').trim()
-  const name: string = (body?.name ?? '').trim()
 
   if (!phone) {
     throw createError({ statusCode: 400, message: 'Телефон обязателен' })
@@ -26,10 +25,9 @@ export default defineEventHandler(async (event) => {
       '🔔 *Новая заявка — Чистая Защита*',
       '',
       `📞 Телефон: \`${phone}\``,
-      name ? `👤 Имя: ${name}` : null,
       '',
       `🕐 ${now} МСК`,
-    ].filter((l) => l !== null)
+    ]
 
     await $fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: 'POST',
