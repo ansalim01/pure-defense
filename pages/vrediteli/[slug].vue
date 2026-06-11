@@ -361,7 +361,7 @@ async function submitForm() {
 
             <form class="pest-cta-block__form" @submit.prevent="submitForm">
               <div v-if="form.success" class="form-success">
-                <AppIcon name="check" :size="20" />
+                <AppIcon name="check" :size="24" />
                 Заявка принята! Перезвоним в ближайшее время.
               </div>
               <template v-else>

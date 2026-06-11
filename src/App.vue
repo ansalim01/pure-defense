@@ -368,7 +368,7 @@ async function submitContactForm() {
               <h2>Получите <span>бесплатную консультацию</span></h2>
 
               <div v-if="heroForm.success" class="form-success">
-                <AppIcon name="check" :size="20" />
+                <AppIcon name="check" :size="24" />
                 Заявка принята! Перезвоним в ближайшее время.
               </div>
 
@@ -575,7 +575,7 @@ async function submitContactForm() {
             </p>
 
             <div v-if="contactForm.success" class="form-success" style="margin-top: 22px;">
-              <AppIcon name="check" :size="20" />
+              <AppIcon name="check" :size="24" />
               Спасибо! Перезвоним в ближайшее время.
             </div>
 
