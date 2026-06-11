@@ -138,8 +138,13 @@ function toggleFaq(index) {
 }
 
 const form = reactive({ phone: '', loading: false, success: false, error: '' })
+const { isValidPhone } = usePhoneValidation()
 async function submitForm() {
   if (form.loading) return
+  if (!isValidPhone(form.phone)) {
+    form.error = 'Введите корректный номер телефона'
+    return
+  }
   form.loading = true
   form.error = ''
   try {

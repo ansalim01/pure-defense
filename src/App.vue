@@ -262,6 +262,7 @@ const heroBackgroundStyle = { '--hero-image': `url(${heroImage})` }
 
 const heroForm = reactive({ phone: '', loading: false, success: false, error: '' })
 const contactForm = reactive({ phone: '', loading: false, success: false, error: '' })
+const { isValidPhone } = usePhoneValidation()
 
 function toggleFaq(index) {
   openedFaq.value = openedFaq.value === index ? -1 : index
@@ -274,6 +275,10 @@ function shiftReviews(direction) {
 
 async function submitHeroForm() {
   if (heroForm.loading) return
+  if (!isValidPhone(heroForm.phone)) {
+    heroForm.error = 'Введите корректный номер телефона'
+    return
+  }
   heroForm.loading = true
   heroForm.error = ''
   try {
@@ -293,6 +298,10 @@ async function submitHeroForm() {
 
 async function submitContactForm() {
   if (contactForm.loading) return
+  if (!isValidPhone(contactForm.phone)) {
+    contactForm.error = 'Введите корректный номер телефона'
+    return
+  }
   contactForm.loading = true
   contactForm.error = ''
   try {
