@@ -262,7 +262,7 @@ const heroBackgroundStyle = { '--hero-image': `url(${heroImage})` }
 
 const heroForm = reactive({ phone: '', loading: false, success: false, error: '', touched: false })
 const contactForm = reactive({ phone: '', loading: false, success: false, error: '', touched: false })
-const { isValidPhone, formatPhone } = usePhoneValidation()
+const { isValidPhone, formatPhone, onPhoneKeydown } = usePhoneValidation()
 
 const heroPhoneInvalid = computed(() => heroForm.touched && heroForm.phone.length > 0 && !isValidPhone(heroForm.phone))
 const contactPhoneInvalid = computed(() => contactForm.touched && contactForm.phone.length > 0 && !isValidPhone(contactForm.phone))
@@ -392,6 +392,7 @@ async function submitContactForm() {
                   :class="{ 'input--error': heroPhoneInvalid }"
                   :disabled="heroForm.loading"
                   @blur="heroForm.touched = true"
+                  @keydown="onPhoneKeydown"
                   @input="heroForm.phone = formatPhone($event.target.value); heroForm.error = ''"
                 />
                 <button class="button button--primary button--block" type="submit" :disabled="heroForm.loading || !heroForm.phone.trim()">
@@ -601,6 +602,7 @@ async function submitContactForm() {
                 :class="{ 'input--error': contactPhoneInvalid }"
                 :disabled="contactForm.loading"
                 @blur="contactForm.touched = true"
+                @keydown="onPhoneKeydown"
                 @input="contactForm.phone = formatPhone($event.target.value); contactForm.error = ''"
               />
               <button class="button button--primary" type="submit" :disabled="contactForm.loading || !contactForm.phone.trim()">

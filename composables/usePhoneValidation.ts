@@ -27,5 +27,15 @@ export function usePhoneValidation() {
     return `+7 (${d.slice(1, 4)}) ${d.slice(4, 7)}-${d.slice(7, 9)}-${d.slice(9, 11)}`
   }
 
-  return { isValidPhone, cleanPhone, formatPhone }
+  function onPhoneKeydown(e: KeyboardEvent): void {
+    const allow = [
+      'Backspace', 'Delete', 'Tab', 'Enter',
+      'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown',
+      'Home', 'End',
+    ]
+    if (allow.includes(e.key) || e.ctrlKey || e.metaKey || /^\d$/.test(e.key)) return
+    e.preventDefault()
+  }
+
+  return { isValidPhone, cleanPhone, formatPhone, onPhoneKeydown }
 }

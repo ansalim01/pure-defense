@@ -138,7 +138,7 @@ function toggleFaq(index) {
 }
 
 const form = reactive({ phone: '', loading: false, success: false, error: '', touched: false })
-const { isValidPhone, formatPhone } = usePhoneValidation()
+const { isValidPhone, formatPhone, onPhoneKeydown } = usePhoneValidation()
 const phoneInvalid = computed(() => form.touched && form.phone.length > 0 && !isValidPhone(form.phone))
 
 async function submitForm() {
@@ -380,6 +380,7 @@ async function submitForm() {
                   :class="{ 'input--error': phoneInvalid }"
                   :disabled="form.loading"
                   @blur="form.touched = true"
+                  @keydown="onPhoneKeydown"
                   @input="form.phone = formatPhone($event.target.value); form.error = ''"
                 />
                 <button class="button button--primary button--block" type="submit" :disabled="form.loading || !form.phone.trim()">
