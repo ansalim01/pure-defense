@@ -1,11 +1,12 @@
 <script setup>
 import { computed, reactive, ref } from 'vue'
 const { trackGoal } = useMetrika()
-import serviceCockroachImage from '~/src/assets/images/service-cockroach.jpg'
-import serviceBedbugImage from '~/src/assets/images/service-bedbug.jpg'
-import serviceRatImage from '~/src/assets/images/service-rat.jpg'
-import serviceMoldImage from '~/src/assets/images/service-mold.jpg'
-import serviceDisinfectionImage from '~/src/assets/images/service-disinfection.jpg'
+import serviceCockroachImage from '~/src/assets/images/service-cockroach.webp'
+import serviceBedbugImage from '~/src/assets/images/service-bedbug.webp'
+import serviceRatImage from '~/src/assets/images/service-rat.webp'
+import serviceMoldImage from '~/src/assets/images/service-mold.webp'
+import serviceDisinfectionImage from '~/src/assets/images/service-disinfection.webp'
+import logoImage from '~/src/assets/images/logo.webp'
 import AppHeader from '~/src/components/AppHeader.vue'
 import AppIcon from '~/src/components/AppIcon.vue'
 import { company, siteMeta } from '~/src/data/company'
@@ -28,6 +29,15 @@ const imageMap = {
 }
 const pestImage = imageMap[pest.imageKey]
 
+const serviceTypeMap = {
+  cockroach: 'Дезинсекция',
+  bedbug: 'Дезинсекция',
+  rat: 'Дератизация',
+  mold: 'Удаление плесени',
+  disinfection: 'Дезинфекция',
+}
+const serviceType = serviceTypeMap[pest.imageKey] ?? 'Дезинсекция'
+
 const runtimeConfig = useRuntimeConfig()
 const requestUrl = useRequestURL()
 const siteOrigin = computed(() => {
@@ -37,6 +47,7 @@ const siteOrigin = computed(() => {
 const canonicalUrl = computed(() => `${siteOrigin.value}/vrediteli/${pest.slug}`)
 const homeUrl = computed(() => `${siteOrigin.value}/`)
 const ogImageUrl = computed(() => new URL(pestImage, siteOrigin.value).toString())
+const logoUrl = computed(() => new URL(logoImage, siteOrigin.value).toString())
 
 // Image dimensions after compression (480px wide, height varies by image)
 const ogImageDimensions = {
@@ -62,14 +73,26 @@ const structuredData = computed(() => ({
     {
       '@type': 'Service',
       name: pest.title,
+      serviceType,
+      category: 'Дезинсекция, дератизация и дезинфекция',
       description: pest.metaDesc,
       url: canonicalUrl.value,
       image: ogImageUrl.value,
       provider: {
-        '@type': 'LocalBusiness',
+        '@type': ['LocalBusiness', 'ProfessionalService'],
+        '@id': `${homeUrl.value}#business`,
         name: company.brand,
+        legalName: company.legalName,
         telephone: company.phoneSchema,
+        email: company.email,
         url: homeUrl.value,
+        logo: {
+          '@type': 'ImageObject',
+          url: logoUrl.value,
+          width: 200,
+          height: 200,
+        },
+        priceRange: siteMeta.priceRange,
         address: {
           '@type': 'PostalAddress',
           streetAddress: company.streetAddress,
@@ -81,6 +104,7 @@ const structuredData = computed(() => ({
       areaServed: { '@type': 'City', name: 'Казань' },
       offers: {
         '@type': 'Offer',
+        url: canonicalUrl.value,
         price: pest.priceValue,
         priceCurrency: 'RUB',
         availability: 'https://schema.org/InStock',

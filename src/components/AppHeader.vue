@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import logoImage from '../assets/images/logo.png'
+import logoImage from '../assets/images/logo.webp'
 import AppIcon from './AppIcon.vue'
 import { company } from '../data/company'
 import { pests } from '../data/pests'

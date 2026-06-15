@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import heroImage from '~/src/assets/images/hero-main.jpg'
+import heroImage from '~/src/assets/images/hero-main.webp'
+import logoImage from '~/src/assets/images/logo.webp'
 import SiteApp from '~/src/App.vue'
 import { company, seoFaqs, seoReviews, seoServices, siteMeta } from '~/src/data/company'
 
@@ -14,6 +15,7 @@ const siteOrigin = computed(() => {
 
 const canonicalUrl = computed(() => new URL('/', `${siteOrigin.value}/`).toString())
 const ogImageUrl = computed(() => new URL(heroImage, siteOrigin.value).toString())
+const logoUrl = computed(() => new URL(logoImage, siteOrigin.value).toString())
 const pageTitle = siteMeta.homeTitle
 const structuredData = computed(() => ({
   '@context': 'https://schema.org',
@@ -42,9 +44,23 @@ const structuredData = computed(() => ({
       legalName: company.legalName,
       url: canonicalUrl.value,
       image: ogImageUrl.value,
+      logo: {
+        '@type': 'ImageObject',
+        url: logoUrl.value,
+        width: 200,
+        height: 200,
+      },
       description: siteMeta.description,
       telephone: company.phoneSchema,
       email: company.email,
+      taxID: company.inn,
+      paymentAccepted: 'Наличные, банковская карта, безналичный расчёт',
+      hasMap: company.mapsHref,
+      knowsLanguage: 'ru-RU',
+      founder: {
+        '@type': 'Person',
+        name: company.legalName.replace(/^ИП\s+/, ''),
+      },
       priceRange: siteMeta.priceRange,
       currenciesAccepted: 'RUB',
       areaServed: siteMeta.serviceArea.map((name) => ({

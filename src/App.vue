@@ -4,16 +4,16 @@ import { useTelegramWebApp } from '~/composables/useTelegramWebApp'
 
 const { openExternalLink } = useTelegramWebApp()
 const { trackGoal } = useMetrika()
-import logoImage from './assets/images/logo.png'
-import heroImage from './assets/images/hero-main.jpg'
-import serviceBedbugImage from './assets/images/service-bedbug.jpg'
-import serviceCockroachImage from './assets/images/service-cockroach.jpg'
-import serviceDisinfectionImage from './assets/images/service-disinfection.jpg'
-import serviceMoldImage from './assets/images/service-mold.jpg'
-import serviceRatImage from './assets/images/service-rat.jpg'
-import workImage from './assets/images/work.jpg'
-import workImage2 from './assets/images/work02.jpg'
-import workImage3 from './assets/images/wokr03.jpg'
+import logoImage from './assets/images/logo.webp'
+import heroImage from './assets/images/hero-main.webp'
+import serviceBedbugImage from './assets/images/service-bedbug.webp'
+import serviceCockroachImage from './assets/images/service-cockroach.webp'
+import serviceDisinfectionImage from './assets/images/service-disinfection.webp'
+import serviceMoldImage from './assets/images/service-mold.webp'
+import serviceRatImage from './assets/images/service-rat.webp'
+import workImage from './assets/images/work.webp'
+import workImage2 from './assets/images/work02.webp'
+import workImage3 from './assets/images/wokr03.webp'
 
 const workImages = [workImage, workImage2, workImage3]
 import AppHeader from './components/AppHeader.vue'
