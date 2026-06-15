@@ -77,7 +77,7 @@ export default defineNuxtConfig({
           tagPosition: 'bodyOpen',
         },
         {
-          innerHTML: '<div><img src="https://mc.yandex.ru/watch/109760856" style="position:absolute;left:-9999px;" alt="" /></div>',
+          innerHTML: '<div><img src="https://mc.yandex.ru/watch/109760856" style="position:absolute;left:-9999px;" alt=""></div>',
           tagPosition: 'bodyOpen',
         },
       ],
