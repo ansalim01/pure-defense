@@ -603,6 +603,7 @@ async function submitContactForm() {
                 :class="{ 'input--error': contactPhoneInvalid }"
                 :disabled="contactForm.loading"
                 @blur="contactForm.touched = true"
+                maxlength="18"
                 @keydown="onPhoneKeydown"
                 @input="contactForm.phone = formatPhone($event.target.value); contactForm.error = ''"
               />
