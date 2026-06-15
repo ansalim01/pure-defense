@@ -1,0 +1,13 @@
+{
+  "name": "Чистая Защита",
+  "short_name": "Чистая Защита",
+  "description": "Уничтожение тараканов, клопов, крыс и плесени в Казани",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#08152b",
+  "theme_color": "#08152b",
+  "icons": [
+    { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
