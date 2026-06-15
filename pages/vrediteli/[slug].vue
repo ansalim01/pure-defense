@@ -380,6 +380,7 @@ async function submitForm() {
                   :class="{ 'input--error': phoneInvalid }"
                   :disabled="form.loading"
                   @blur="form.touched = true"
+                  maxlength="18"
                   @keydown="onPhoneKeydown"
                   @input="form.phone = formatPhone($event.target.value); form.error = ''"
                 />

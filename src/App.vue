@@ -392,6 +392,7 @@ async function submitContactForm() {
                   :class="{ 'input--error': heroPhoneInvalid }"
                   :disabled="heroForm.loading"
                   @blur="heroForm.touched = true"
+                  maxlength="18"
                   @keydown="onPhoneKeydown"
                   @input="heroForm.phone = formatPhone($event.target.value); heroForm.error = ''"
                 />
