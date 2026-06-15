@@ -342,7 +342,7 @@ async function submitContactForm() {
                 и других вредителей <span>в&nbsp;Казани</span>
               </span>
             </h1>
-            <div class="hero__meta" aria-label="Преимущества">
+            <div class="hero__meta" role="group" aria-label="Преимущества">
               <span v-for="fact in heroFacts" :key="fact">{{ fact }}</span>
             </div>
             <p class="hero__lead">
@@ -351,15 +351,15 @@ async function submitContactForm() {
             </p>
 
             <div class="hero__highlights">
-              <article v-for="item in heroHighlights" :key="item.title" class="hero-highlight">
+              <div v-for="item in heroHighlights" :key="item.title" class="hero-highlight">
                 <span class="hero-highlight__icon">
                   <AppIcon :name="item.icon" :size="24" />
                 </span>
                 <div>
-                  <h3>{{ item.title }}</h3>
+                  <strong>{{ item.title }}</strong>
                   <p>{{ item.text }}</p>
                 </div>
-              </article>
+              </div>
             </div>
 
             <div class="hero__actions">
@@ -502,7 +502,7 @@ async function submitContactForm() {
               <h2>Отзывы наших клиентов</h2>
             </div>
 
-            <div class="review-controls" aria-label="Управление отзывами">
+            <div class="review-controls" role="group" aria-label="Управление отзывами">
               <button type="button" aria-label="Показать предыдущие отзывы" @click="shiftReviews(-1)">
                 <AppIcon name="arrow-left" :size="22" />
               </button>
@@ -543,7 +543,7 @@ async function submitContactForm() {
 
           <div class="faq-grid">
             <div v-for="(column, columnIndex) in faqColumns" :key="columnIndex" class="faq-column">
-              <article
+              <div
                 v-for="item in column"
                 :key="item.question"
                 class="faq-item"
@@ -564,7 +564,7 @@ async function submitContactForm() {
                 <p v-if="openedFaq === item.index" class="faq-item__answer">
                   {{ item.answer }}
                 </p>
-              </article>
+              </div>
             </div>
           </div>
         </div>
@@ -686,16 +686,18 @@ async function submitContactForm() {
           <a href="#contacts">Контакты</a>
         </div>
 
-        <address class="footer__contacts">
+        <div class="footer__contacts">
           <h3>Контакты</h3>
-          <a :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
-          <a :href="company.emailHref">{{ company.email }}</a>
-          <a :href="company.mapsHref" target="_blank" rel="noopener noreferrer" @click.prevent="openExternalLink(company.mapsHref)">{{ company.address }}</a>
-          <small>{{ company.legalName }}</small>
-          <small>ИНН {{ company.inn }} • ОГРНИП {{ company.ogrnip }}</small>
-          <small>р/с {{ company.checkingAccount }}</small>
-          <small>к/с {{ company.correspondentAccount }} • БИК {{ company.bik }}</small>
-        </address>
+          <address>
+            <a :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
+            <a :href="company.emailHref">{{ company.email }}</a>
+            <a :href="company.mapsHref" target="_blank" rel="noopener noreferrer" @click.prevent="openExternalLink(company.mapsHref)">{{ company.address }}</a>
+            <small>{{ company.legalName }}</small>
+            <small>ИНН {{ company.inn }} • ОГРНИП {{ company.ogrnip }}</small>
+            <small>р/с {{ company.checkingAccount }}</small>
+            <small>к/с {{ company.correspondentAccount }} • БИК {{ company.bik }}</small>
+          </address>
+        </div>
       </div>
 
       <div class="container footer__bottom">
@@ -707,7 +709,7 @@ async function submitContactForm() {
       </div>
     </footer>
 
-    <div class="mobile-cta" aria-label="Быстрые действия">
+    <div class="mobile-cta" role="navigation" aria-label="Быстрые действия">
       <a class="mobile-cta__call" :href="company.phoneHref" @click="trackGoal('phone_click')">
         <span class="mobile-cta__call-icon">
           <AppIcon name="phone" :size="20" />
