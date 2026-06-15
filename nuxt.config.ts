@@ -51,6 +51,7 @@ export default defineNuxtConfig({
         { name: 'geo.placename', content: 'Казань' },
         { name: 'geo.position', content: '55.796391;49.108891' },
         { name: 'ICBM', content: '55.796391, 49.108891' },
+        { name: 'google-site-verification', content: 'Ux7vxWxPBG6g_tWtuMnQ4-BFH3N9_dMBJ2relSQeM3Q' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
