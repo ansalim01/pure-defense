@@ -51,11 +51,14 @@ onBeforeUnmount(() => {
       </NuxtLink>
 
       <!-- Backdrop overlay (teleported to body to escape header stacking context) -->
-      <Teleport to="body">
-        <Transition name="backdrop">
-          <div v-if="isMenuOpen" class="menu-backdrop" @click="closeMenu" aria-hidden="true" />
-        </Transition>
-      </Teleport>
+      <!-- ClientOnly: backdrop only appears via client interaction; avoids Teleport+Transition SSR hydration mismatch -->
+      <ClientOnly>
+        <Teleport to="body">
+          <Transition name="backdrop">
+            <div v-if="isMenuOpen" class="menu-backdrop" @click="closeMenu" aria-hidden="true" />
+          </Transition>
+        </Teleport>
+      </ClientOnly>
 
       <!-- Phone quick-dial + hamburger -->
       <a class="header__phone-quick" :href="company.phoneHref" aria-label="Позвонить" @click="trackGoal('phone_click')">
