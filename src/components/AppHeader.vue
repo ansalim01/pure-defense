@@ -79,6 +79,7 @@ onBeforeUnmount(() => {
       <!-- Desktop nav -->
       <nav id="site-navigation" class="nav" aria-label="Основная навигация">
         <NuxtLink to="/#services">Услуги</NuxtLink>
+        <NuxtLink to="/blog">Блог</NuxtLink>
         <a v-for="item in navigation" :key="item.href" :href="item.href">{{ item.label }}</a>
       </nav>
 
@@ -111,6 +112,7 @@ onBeforeUnmount(() => {
 
             <div class="nav__divider" aria-hidden="true" />
 
+            <NuxtLink to="/blog" @click="closeMenu">Блог</NuxtLink>
             <a v-for="item in navigation" :key="item.href" :href="item.href" @click="closeMenu">
               {{ item.label }}
             </a>

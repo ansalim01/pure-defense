@@ -1,5 +1,6 @@
 import { setHeader } from 'h3'
 import { getSiteOrigin } from '../utils/site-url'
+import { posts } from '../../src/data/posts'
 
 const lastModified = new Date().toISOString().split('T')[0]
 
@@ -13,6 +14,12 @@ export default defineEventHandler((event) => {
       loc: `${siteOrigin}/vrediteli/${slug}`,
       lastmod: lastModified,
       priority: '0.8',
+    })),
+    { loc: `${siteOrigin}/blog`, lastmod: lastModified, priority: '0.6' },
+    ...posts.map((post) => ({
+      loc: `${siteOrigin}/blog/${post.slug}`,
+      lastmod: post.dateModified,
+      priority: '0.7',
     })),
     { loc: `${siteOrigin}/privacy`, lastmod: lastModified, priority: '0.3' },
   ]
