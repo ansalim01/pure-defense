@@ -23,7 +23,6 @@ export default defineEventHandler((event) => {
       lastmod: lastModified,
       priority: '0.7',
     })),
-    { loc: `${siteOrigin}/ceny`, lastmod: lastModified, priority: '0.7' },
     { loc: `${siteOrigin}/rayony`, lastmod: lastModified, priority: '0.6' },
     { loc: `${siteOrigin}/blog`, lastmod: lastModified, priority: '0.6' },
     ...posts.map((post) => ({

@@ -719,7 +719,6 @@ async function submitContactForm() {
           <NuxtLink to="/uslugi/chastnyj-dom">Обработка домов и участков</NuxtLink>
           <NuxtLink to="/uslugi/kafe-restoran">Обработка кафе и ресторанов</NuxtLink>
           <NuxtLink to="/uslugi/obshchezhitie">Обработка общежитий</NuxtLink>
-          <NuxtLink to="/ceny">Цены</NuxtLink>
           <NuxtLink to="/rayony">Районы Казани</NuxtLink>
         </div>
 
