@@ -1096,6 +1096,32 @@ section[id] {
   font-size: 0.9rem;
 }
 
+.service-more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 28px 0 0;
+  font-size: 0.9375rem;
+}
+
+.service-more__label {
+  color: var(--slate-700);
+  font-weight: 600;
+}
+
+.service-more__link {
+  color: var(--green-600);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.service-more__link:hover {
+  border-bottom-color: currentColor;
+}
+
 .advantage-panel {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -1545,7 +1571,7 @@ section[id] {
 
 .footer__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) repeat(3, minmax(0, 0.7fr));
+  grid-template-columns: minmax(0, 1.1fr) repeat(4, minmax(0, 0.7fr));
   gap: 28px;
 }
 
