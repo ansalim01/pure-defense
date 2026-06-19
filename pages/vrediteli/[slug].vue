@@ -9,6 +9,7 @@ import serviceDisinfectionImage from '~/src/assets/images/service-disinfection.w
 import serviceAntImage from '~/src/assets/images/service-ant.webp'
 import serviceFleaImage from '~/src/assets/images/service-flea.webp'
 import serviceMosquitoImage from '~/src/assets/images/service-mosquito.webp'
+import serviceMouseImage from '~/src/assets/images/service-mouse.png'
 import logoImage from '~/src/assets/images/logo.webp'
 import heroFallbackImage from '~/src/assets/images/hero-main.webp'
 import AppHeader from '~/src/components/AppHeader.vue'
@@ -28,7 +29,7 @@ const imageMap = {
   cockroach: serviceCockroachImage,
   bedbug: serviceBedbugImage,
   rat: serviceRatImage,
-  mouse: serviceRatImage, // мыши показываем на фото грызуна, пока нет отдельного снимка
+  mouse: serviceMouseImage,
   ant: serviceAntImage,
   flea: serviceFleaImage,
   mosquito: serviceMosquitoImage,

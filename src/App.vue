@@ -9,6 +9,7 @@ import heroImage from './assets/images/hero-main.webp'
 import serviceBedbugImage from './assets/images/service-bedbug.webp'
 import serviceCockroachImage from './assets/images/service-cockroach.webp'
 import serviceAntImage from './assets/images/service-ant.webp'
+import serviceMouseImage from './assets/images/service-mouse.png'
 import serviceDisinfectionImage from './assets/images/service-disinfection.webp'
 import serviceMoldImage from './assets/images/service-mold.webp'
 import serviceRatImage from './assets/images/service-rat.webp'
@@ -120,6 +121,11 @@ const services = [
     title: 'Уничтожение мышей',
     subtitle: 'Квартиры, дома, дачи, склады',
     price: 'от 3000 ₽',
+    image: serviceMouseImage,
+    alt: 'Домовая мышь крупным планом',
+    position: 'center center',
+    width: 323,
+    height: 215,
     href: '/vrediteli/myshi',
   },
   {
