@@ -965,9 +965,8 @@ section[id] {
 }
 
 .service-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -985,9 +984,6 @@ section[id] {
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(27, 63, 108, 0.06);
-  /* Гибкая ширина: ряды заполняются, неполный последний ряд центрируется */
-  flex: 1 1 210px;
-  max-width: 250px;
 }
 
 .service-card__media {
@@ -1917,6 +1913,10 @@ section[id] {
     grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
   }
 
+  .service-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .advantage-panel {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1976,6 +1976,10 @@ section[id] {
   .hero-form {
     width: 100%;
     max-width: none;
+  }
+
+  .service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .review-grid,
@@ -2157,12 +2161,8 @@ section[id] {
   }
 
   .service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
-  }
-
-  .service-card {
-    flex-basis: 140px;
-    max-width: none;
   }
 
   /* Последняя карточка — горизонтальная на всю ширину */
