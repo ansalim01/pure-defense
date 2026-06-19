@@ -965,8 +965,9 @@ section[id] {
 }
 
 .service-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 18px;
 }
 
@@ -984,6 +985,9 @@ section[id] {
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(27, 63, 108, 0.06);
+  /* Гибкая ширина: ряды заполняются, неполный последний ряд центрируется */
+  flex: 1 1 210px;
+  max-width: 250px;
 }
 
 .service-card__media {
@@ -1094,6 +1098,32 @@ section[id] {
   flex: 1;
   padding-inline: 10px;
   font-size: 0.9rem;
+}
+
+.service-more {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 28px 0 0;
+  font-size: 0.9375rem;
+}
+
+.service-more__label {
+  color: var(--slate-700);
+  font-weight: 600;
+}
+
+.service-more__link {
+  color: var(--green-600);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.service-more__link:hover {
+  border-bottom-color: currentColor;
 }
 
 .advantage-panel {
@@ -1545,7 +1575,7 @@ section[id] {
 
 .footer__grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) repeat(3, minmax(0, 0.7fr));
+  grid-template-columns: minmax(0, 1.1fr) repeat(4, minmax(0, 0.7fr));
   gap: 28px;
 }
 
@@ -1887,10 +1917,6 @@ section[id] {
     grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
   }
 
-  .service-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
   .advantage-panel {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1950,10 +1976,6 @@ section[id] {
   .hero-form {
     width: 100%;
     max-width: none;
-  }
-
-  .service-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .review-grid,
@@ -2135,8 +2157,12 @@ section[id] {
   }
 
   .service-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
+  }
+
+  .service-card {
+    flex-basis: 140px;
+    max-width: none;
   }
 
   /* Последняя карточка — горизонтальная на всю ширину */

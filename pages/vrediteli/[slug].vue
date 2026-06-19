@@ -7,6 +7,7 @@ import serviceRatImage from '~/src/assets/images/service-rat.webp'
 import serviceMoldImage from '~/src/assets/images/service-mold.webp'
 import serviceDisinfectionImage from '~/src/assets/images/service-disinfection.webp'
 import logoImage from '~/src/assets/images/logo.webp'
+import heroFallbackImage from '~/src/assets/images/hero-main.webp'
 import AppHeader from '~/src/components/AppHeader.vue'
 import AppIcon from '~/src/components/AppIcon.vue'
 import { company, siteMeta } from '~/src/data/company'
@@ -24,19 +25,15 @@ const imageMap = {
   cockroach: serviceCockroachImage,
   bedbug: serviceBedbugImage,
   rat: serviceRatImage,
+  mouse: serviceRatImage, // мыши показываем на фото грызуна, пока нет отдельного снимка
   mold: serviceMoldImage,
   disinfection: serviceDisinfectionImage,
 }
+// Для вредителей без собственного фото (муравьи, осы и т.д.) hero рисуется заглушкой.
 const pestImage = imageMap[pest.imageKey]
+const shareImage = pestImage || heroFallbackImage
 
-const serviceTypeMap = {
-  cockroach: 'Дезинсекция',
-  bedbug: 'Дезинсекция',
-  rat: 'Дератизация',
-  mold: 'Удаление плесени',
-  disinfection: 'Дезинфекция',
-}
-const serviceType = serviceTypeMap[pest.imageKey] ?? 'Дезинсекция'
+const serviceType = pest.serviceType ?? 'Дезинсекция'
 
 const runtimeConfig = useRuntimeConfig()
 const requestUrl = useRequestURL()
@@ -46,7 +43,7 @@ const siteOrigin = computed(() => {
 })
 const canonicalUrl = computed(() => `${siteOrigin.value}/vrediteli/${pest.slug}`)
 const homeUrl = computed(() => `${siteOrigin.value}/`)
-const ogImageUrl = computed(() => new URL(pestImage, siteOrigin.value).toString())
+const ogImageUrl = computed(() => new URL(shareImage, siteOrigin.value).toString())
 const logoUrl = computed(() => new URL(logoImage, siteOrigin.value).toString())
 
 // Image dimensions after compression (480px wide, height varies by image)
@@ -54,10 +51,14 @@ const ogImageDimensions = {
   cockroach:     { width: '480', height: '480' },
   bedbug:        { width: '480', height: '338' },
   rat:           { width: '480', height: '319' },
+  mouse:         { width: '480', height: '319' },
   mold:          { width: '480', height: '360' },
   disinfection:  { width: '480', height: '320' },
 }
-const ogDims = ogImageDimensions[pest.imageKey] ?? { width: '480', height: '360' }
+// Без собственного фото отдаём общий hero-баннер (1200×800).
+const ogDims = pestImage
+  ? ogImageDimensions[pest.imageKey] ?? { width: '480', height: '360' }
+  : { width: '1200', height: '800' }
 
 const structuredData = computed(() => ({
   '@context': 'https://schema.org',
@@ -224,12 +225,18 @@ async function submitForm() {
 
           <div class="pest-hero__media">
             <img
+              v-if="pestImage"
               class="pest-hero__image"
               :src="pestImage"
               :alt="pest.imageAlt"
               loading="eager"
               fetchpriority="high"
             />
+            <div v-else class="pest-hero__fallback" aria-hidden="true">
+              <AppIcon :name="pest.icon || 'bug'" :size="72" />
+              <span>{{ pest.nameNominative }}</span>
+              <small>в Казани</small>
+            </div>
           </div>
         </div>
       </section>
@@ -574,6 +581,36 @@ async function submitForm() {
   object-position: center top;
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   display: block;
+}
+
+/* Заглушка hero для вредителей без собственного фото */
+.pest-hero__fallback {
+  width: 100%;
+  max-width: 440px;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(255 255 255 / 0.92);
+  background: linear-gradient(160deg, rgba(97 194 68 / 0.18), rgba(255 255 255 / 0.04));
+  border: 1px solid rgba(255 255 255 / 0.12);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.pest-hero__fallback span {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.pest-hero__fallback small {
+  font-size: 0.95rem;
+  color: rgba(255 255 255 / 0.6);
+}
+
+.pest-hero__fallback :deep(svg) {
+  color: var(--green-400);
 }
 
 /* ── About ── */

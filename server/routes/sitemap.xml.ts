@@ -1,10 +1,13 @@
 import { setHeader } from 'h3'
 import { getSiteOrigin } from '../utils/site-url'
 import { posts } from '../../src/data/posts'
+import { pests } from '../../src/data/pests'
+import { segments } from '../../src/data/segments'
 
 const lastModified = new Date().toISOString().split('T')[0]
 
-const pestSlugs = ['tarakany', 'klopy', 'krysy', 'pleseni', 'dezinfekciya']
+const pestSlugs = pests.map((pest) => pest.slug)
+const segmentSlugs = segments.map((segment) => segment.slug)
 
 export default defineEventHandler((event) => {
   const siteOrigin = getSiteOrigin(event)
@@ -15,6 +18,13 @@ export default defineEventHandler((event) => {
       lastmod: lastModified,
       priority: '0.8',
     })),
+    ...segmentSlugs.map((slug) => ({
+      loc: `${siteOrigin}/uslugi/${slug}`,
+      lastmod: lastModified,
+      priority: '0.7',
+    })),
+    { loc: `${siteOrigin}/ceny`, lastmod: lastModified, priority: '0.7' },
+    { loc: `${siteOrigin}/rayony`, lastmod: lastModified, priority: '0.6' },
     { loc: `${siteOrigin}/blog`, lastmod: lastModified, priority: '0.6' },
     ...posts.map((post) => ({
       loc: `${siteOrigin}/blog/${post.slug}`,

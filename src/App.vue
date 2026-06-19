@@ -20,6 +20,12 @@ import AppHeader from './components/AppHeader.vue'
 import AppIcon from './components/AppIcon.vue'
 import DistrictMap from './components/DistrictMap.vue'
 import { company } from './data/company'
+import { pests } from './data/pests'
+
+// Вредители, которых нет в основной сетке карточек, — выводим строкой ссылок
+// под услугами для перелинковки и доступности с десктопной главной.
+const homeCardSlugs = ['tarakany', 'klopy', 'muravi', 'krysy', 'myshi', 'dezinfekciya', 'pleseni']
+const extraServices = pests.filter((pest) => !homeCardSlugs.includes(pest.slug))
 
 const navigation = [
   { label: 'Услуги', href: '#services' },
@@ -82,10 +88,18 @@ const services = [
     href: '/vrediteli/klopy',
   },
   {
+    icon: 'bug',
+    theme: 'sand',
+    title: 'Уничтожение муравьёв',
+    subtitle: 'Квартиры, кухни, фараоновы муравьи',
+    price: 'от 1800 ₽',
+    href: '/vrediteli/muravi',
+  },
+  {
     icon: 'rat',
     theme: 'stone',
-    title: 'Дератизация',
-    subtitle: 'Крысы, мыши, подвалы, склады',
+    title: 'Уничтожение крыс',
+    subtitle: 'Дератизация: подвалы, склады, магазины',
     price: 'от 3500 ₽',
     image: serviceRatImage,
     alt: 'Крыса на светлом фоне',
@@ -93,6 +107,14 @@ const services = [
     width: 600,
     height: 399,
     href: '/vrediteli/krysy',
+  },
+  {
+    icon: 'rat',
+    theme: 'stone',
+    title: 'Уничтожение мышей',
+    subtitle: 'Квартиры, дома, дачи, склады',
+    price: 'от 3000 ₽',
+    href: '/vrediteli/myshi',
   },
   {
     icon: 'spray',
@@ -421,6 +443,7 @@ async function submitContactForm() {
             <article v-for="service in services" :key="service.title" class="service-card">
               <div class="service-card__media" :class="`service-card__media--${service.theme}`">
                 <img
+                  v-if="service.image"
                   class="service-card__image"
                   :src="service.image"
                   :alt="service.alt"
@@ -446,6 +469,16 @@ async function submitContactForm() {
               </div>
             </article>
           </div>
+
+          <p v-if="extraServices.length" class="service-more">
+            <span class="service-more__label">Также уничтожаем:</span>
+            <NuxtLink
+              v-for="pest in extraServices"
+              :key="pest.slug"
+              class="service-more__link"
+              :to="`/vrediteli/${pest.slug}`"
+            >{{ pest.nameNominative }}</NuxtLink>
+          </p>
         </div>
       </section>
 
@@ -673,9 +706,21 @@ async function submitContactForm() {
           <h3>Услуги</h3>
           <NuxtLink to="/vrediteli/tarakany">Уничтожение тараканов</NuxtLink>
           <NuxtLink to="/vrediteli/klopy">Уничтожение клопов</NuxtLink>
-          <NuxtLink to="/vrediteli/krysy">Дератизация</NuxtLink>
+          <NuxtLink to="/vrediteli/muravi">Уничтожение муравьёв</NuxtLink>
+          <NuxtLink to="/vrediteli/krysy">Уничтожение крыс</NuxtLink>
+          <NuxtLink to="/vrediteli/myshi">Уничтожение мышей</NuxtLink>
           <NuxtLink to="/vrediteli/dezinfekciya">Дезинфекция помещений</NuxtLink>
           <NuxtLink to="/vrediteli/pleseni">Удаление плесени</NuxtLink>
+        </div>
+
+        <div class="footer__links">
+          <h3>По объектам</h3>
+          <NuxtLink to="/uslugi/kvartira">Обработка квартир</NuxtLink>
+          <NuxtLink to="/uslugi/chastnyj-dom">Обработка домов и участков</NuxtLink>
+          <NuxtLink to="/uslugi/kafe-restoran">Обработка кафе и ресторанов</NuxtLink>
+          <NuxtLink to="/uslugi/obshchezhitie">Обработка общежитий</NuxtLink>
+          <NuxtLink to="/ceny">Цены</NuxtLink>
+          <NuxtLink to="/rayony">Районы Казани</NuxtLink>
         </div>
 
         <div class="footer__links">
