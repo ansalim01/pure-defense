@@ -6,6 +6,9 @@ import serviceBedbugImage from '~/src/assets/images/service-bedbug.webp'
 import serviceRatImage from '~/src/assets/images/service-rat.webp'
 import serviceMoldImage from '~/src/assets/images/service-mold.webp'
 import serviceDisinfectionImage from '~/src/assets/images/service-disinfection.webp'
+import serviceAntImage from '~/src/assets/images/service-ant.webp'
+import serviceFleaImage from '~/src/assets/images/service-flea.webp'
+import serviceMosquitoImage from '~/src/assets/images/service-mosquito.webp'
 import logoImage from '~/src/assets/images/logo.webp'
 import heroFallbackImage from '~/src/assets/images/hero-main.webp'
 import AppHeader from '~/src/components/AppHeader.vue'
@@ -26,6 +29,9 @@ const imageMap = {
   bedbug: serviceBedbugImage,
   rat: serviceRatImage,
   mouse: serviceRatImage, // мыши показываем на фото грызуна, пока нет отдельного снимка
+  ant: serviceAntImage,
+  flea: serviceFleaImage,
+  mosquito: serviceMosquitoImage,
   mold: serviceMoldImage,
   disinfection: serviceDisinfectionImage,
 }
@@ -52,6 +58,9 @@ const ogImageDimensions = {
   bedbug:        { width: '480', height: '338' },
   rat:           { width: '480', height: '319' },
   mouse:         { width: '480', height: '319' },
+  ant:           { width: '480', height: '320' },
+  flea:          { width: '480', height: '400' },
+  mosquito:      { width: '480', height: '320' },
   mold:          { width: '480', height: '360' },
   disinfection:  { width: '480', height: '320' },
 }

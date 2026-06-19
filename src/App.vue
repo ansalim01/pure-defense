@@ -8,6 +8,7 @@ import logoImage from './assets/images/logo.webp'
 import heroImage from './assets/images/hero-main.webp'
 import serviceBedbugImage from './assets/images/service-bedbug.webp'
 import serviceCockroachImage from './assets/images/service-cockroach.webp'
+import serviceAntImage from './assets/images/service-ant.webp'
 import serviceDisinfectionImage from './assets/images/service-disinfection.webp'
 import serviceMoldImage from './assets/images/service-mold.webp'
 import serviceRatImage from './assets/images/service-rat.webp'
@@ -93,6 +94,11 @@ const services = [
     title: 'Уничтожение муравьёв',
     subtitle: 'Квартиры, кухни, фараоновы муравьи',
     price: 'от 1800 ₽',
+    image: serviceAntImage,
+    alt: 'Домашние муравьи крупным планом',
+    position: 'center center',
+    width: 1536,
+    height: 1024,
     href: '/vrediteli/muravi',
   },
   {
