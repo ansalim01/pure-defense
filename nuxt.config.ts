@@ -106,6 +106,7 @@ export default defineNuxtConfig({
         { name: 'geo.position', content: '55.796391;49.108891' },
         { name: 'ICBM', content: '55.796391, 49.108891' },
         { name: 'google-site-verification', content: 'Ux7vxWxPBG6g_tWtuMnQ4-BFH3N9_dMBJ2relSQeM3Q' },
+        { name: 'yandex-verification', content: '60b9266cdbfedd61' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
