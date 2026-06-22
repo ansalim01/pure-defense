@@ -6,25 +6,12 @@ import AppIcon from '~/src/components/AppIcon.vue'
 import DistrictMap from '~/src/components/DistrictMap.vue'
 import heroFallbackImage from '~/src/assets/images/hero-main.webp'
 import { company, siteMeta } from '~/src/data/company'
+import { cityDistricts, suburbDistricts } from '~/src/data/districts'
 
 const pageTitle = 'Дезинсекция по районам Казани — выезд за 1 час'
 const metaTitle = 'Дезинсекция по районам Казани — выезд за 1 час'
 const metaDesc =
   'Уничтожение тараканов, клопов, крыс и других вредителей во всех районах Казани и области: Вахитовский, Ново-Савиновский, Приволжский, Московский, Кировский, Советский, Авиастроительный. Выезд за 1 час.'
-
-const districts = [
-  'Вахитовский район',
-  'Ново-Савиновский район',
-  'Приволжский район',
-  'Московский район',
-  'Кировский район',
-  'Советский район',
-  'Авиастроительный район',
-  'Азино и Горки',
-  'Дербышки и Соцгород',
-]
-
-const suburbs = ['Лаишево', 'Зеленодольск', 'Высокая Гора', 'Иннополис', 'Пестрецы', 'и другие населённые пункты области']
 
 const runtimeConfig = useRuntimeConfig()
 const requestUrl = useRequestURL()
@@ -52,7 +39,7 @@ const structuredData = computed(() => ({
       serviceType: 'Санитарная обработка помещений',
       url: canonicalUrl.value,
       provider: { '@type': ['LocalBusiness', 'ProfessionalService'], '@id': `${homeUrl.value}#business`, name: company.brand },
-      areaServed: districts.map((name) => ({ '@type': 'AdministrativeArea', name: name.replace(' район', '') })),
+      areaServed: cityDistricts.map((d) => ({ '@type': 'AdministrativeArea', name: d.nameShort })),
     },
   ],
 }))
@@ -151,13 +138,18 @@ async function submitForm() {
               <h2>Районы Казани, куда выезжаем</h2>
             </div>
             <ul class="rayony-list">
-              <li v-for="district in districts" :key="district">
+              <li v-for="district in cityDistricts" :key="district.slug">
                 <span class="rayony-list__icon"><AppIcon name="pin" :size="14" /></span>
-                {{ district }}
+                <NuxtLink :to="`/rayony/${district.slug}`">{{ district.name }}</NuxtLink>
               </li>
             </ul>
             <p class="rayony-suburbs">
-              <strong>Пригород и область:</strong> {{ suburbs.join(', ') }}.
+              <strong>Пригород и область:</strong>
+              <NuxtLink
+                v-for="(suburb, index) in suburbDistricts"
+                :key="suburb.slug"
+                :to="`/rayony/${suburb.slug}`"
+              >{{ suburb.name }}<template v-if="index < suburbDistricts.length - 1">, </template></NuxtLink>.
             </p>
           </div>
           <div class="rayony-map">
@@ -326,6 +318,17 @@ async function submitForm() {
   gap: 10px;
   font-size: 0.9375rem;
   color: #24364d;
+}
+
+.rayony-list a,
+.rayony-suburbs a {
+  color: #24364d;
+  text-decoration: none;
+}
+
+.rayony-list a:hover,
+.rayony-suburbs a:hover {
+  color: var(--green-600);
 }
 
 .rayony-list__icon {

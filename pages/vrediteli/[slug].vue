@@ -77,7 +77,7 @@ const structuredData = computed(() => ({
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Главная', item: homeUrl.value },
-        { '@type': 'ListItem', position: 2, name: 'Услуги', item: `${homeUrl.value}#services` },
+        { '@type': 'ListItem', position: 2, name: 'Услуги', item: `${homeUrl.value}/uslugi` },
         { '@type': 'ListItem', position: 3, name: pest.nameNominative, item: canonicalUrl.value },
       ],
     },

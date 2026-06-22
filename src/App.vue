@@ -22,6 +22,7 @@ import AppHeader from './components/AppHeader.vue'
 import AppIcon from './components/AppIcon.vue'
 import DistrictMap from './components/DistrictMap.vue'
 import { company } from './data/company'
+import { cityDistricts } from './data/districts'
 import { pests } from './data/pests'
 
 // Вредители, которых нет в основной сетке карточек, — выводим строкой ссылок
@@ -269,18 +270,7 @@ const faqs = [
   },
 ]
 
-const districts = [
-  'Вахитовский район',
-  'Приволжский район',
-  'Советский район',
-  'Ново-Савиновский район',
-  'Авиастроительный район',
-  'Московский район',
-  'Кировский район',
-  'Лаишевский район',
-  'Высокогорский район',
-  'и другие районы области',
-]
+const districts = cityDistricts.map((d) => ({ name: d.name, slug: d.slug }))
 
 const districtColumns = [districts.slice(0, 5), districts.slice(5)]
 const faqsWithIndex = faqs.map((faq, index) => ({ ...faq, index }))
@@ -681,9 +671,9 @@ async function submitContactForm() {
             <div class="coverage-card__content">
               <div class="coverage-card__list">
                 <ul v-for="(column, index) in districtColumns" :key="index">
-                  <li v-for="item in column" :key="item">
+                  <li v-for="item in column" :key="item.slug">
                     <AppIcon name="pin" :size="16" />
-                    {{ item }}
+                    <NuxtLink :to="`/rayony/${item.slug}`">{{ item.name }}</NuxtLink>
                   </li>
                 </ul>
               </div>
@@ -717,6 +707,7 @@ async function submitContactForm() {
 
         <div class="footer__links">
           <h3>Услуги</h3>
+          <NuxtLink to="/uslugi">Все услуги</NuxtLink>
           <NuxtLink to="/vrediteli/tarakany">Уничтожение тараканов</NuxtLink>
           <NuxtLink to="/vrediteli/klopy">Уничтожение клопов</NuxtLink>
           <NuxtLink to="/vrediteli/muravi">Уничтожение муравьёв</NuxtLink>

@@ -3,6 +3,7 @@ import { getSiteOrigin } from '../utils/site-url'
 import { posts } from '../../src/data/posts'
 import { pests } from '../../src/data/pests'
 import { segments } from '../../src/data/segments'
+import { districts } from '../../src/data/districts'
 
 const lastModified = new Date().toISOString().split('T')[0]
 
@@ -24,6 +25,12 @@ export default defineEventHandler((event) => {
       priority: '0.7',
     })),
     { loc: `${siteOrigin}/rayony`, lastmod: lastModified, priority: '0.6' },
+    ...districts.map((district) => ({
+      loc: `${siteOrigin}/rayony/${district.slug}`,
+      lastmod: lastModified,
+      priority: '0.65',
+    })),
+    { loc: `${siteOrigin}/uslugi`, lastmod: lastModified, priority: '0.75' },
     { loc: `${siteOrigin}/blog`, lastmod: lastModified, priority: '0.6' },
     ...posts.map((post) => ({
       loc: `${siteOrigin}/blog/${post.slug}`,
