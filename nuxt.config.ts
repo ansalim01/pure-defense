@@ -1,4 +1,9 @@
 export default defineNuxtConfig({
+  compatibilityDate: '2026-06-22',
+  experimental: {
+    // Vite 7 pre-transform race: #app-manifest not resolved on cold dev start (nuxt/nuxt#33606)
+    appManifest: false,
+  },
   ssr: true,
   routeRules: {
     '/': { prerender: true },
