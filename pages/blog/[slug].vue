@@ -194,6 +194,21 @@ function toggleFaq(index) {
               </ul>
             </aside>
 
+            <aside class="post__local" aria-label="Услуги в Казани">
+              <p class="post__local-eyebrow">Казань и область</p>
+              <h2 class="post__local-title">Нужна профессиональная обработка?</h2>
+              <p class="post__local-text">
+                «{{ company.brand }}» выезжает по всем районам Казани и пригороду — выезд за 1 час,
+                договор и гарантия до 1 года. Если самостоятельные методы не помогли, закажите
+                <NuxtLink :to="`/vrediteli/${post.relatedService.slug}`">{{ post.relatedService.label.toLowerCase() }}</NuxtLink>
+                или посмотрите <NuxtLink to="/uslugi">все услуги</NuxtLink>.
+              </p>
+              <a class="button button--primary" :href="company.phoneHref" @click="trackGoal('phone_click')">
+                <AppIcon name="phone" :size="18" />
+                Вызвать в Казани
+              </a>
+            </aside>
+
             <BlogContent :blocks="post.body" />
 
             <section class="post__faq" aria-label="Частые вопросы">
@@ -459,6 +474,43 @@ function toggleFaq(index) {
   height: 8px;
   border-radius: 50%;
   background: var(--green-500);
+}
+
+.post__local {
+  background: #fff;
+  border: 1px solid var(--slate-200);
+  border-left: 4px solid var(--green-500);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  margin-bottom: 36px;
+}
+
+.post__local-eyebrow {
+  margin: 0 0 6px;
+  color: var(--green-600);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.post__local-title {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+  color: #24364d;
+}
+
+.post__local-text {
+  margin: 0 0 18px;
+  color: #445568;
+  line-height: 1.65;
+  font-size: 0.96rem;
+}
+
+.post__local-text a {
+  color: var(--green-600);
+  font-weight: 600;
+  text-decoration: none;
 }
 
 /* ── FAQ ── */

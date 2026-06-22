@@ -1,0 +1,20 @@
+name = "pure-defense-monitor"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# Проверка раз в 5 минут. Cron в UTC, но для интервала это неважно.
+# Примеры: "*/1 * * * *" — раз в минуту, "*/10 * * * *" — раз в 10 минут.
+[triggers]
+crons = ["*/5 * * * *"]
+
+[vars]
+SITE_URL = "https://dez-profi-kazan.ru/"
+FAIL_THRESHOLD = "2"      # сколько неудач подряд до алерта (2 × 5 мин ≈ алерт через ~10 мин)
+TIMEOUT_MS = "15000"      # таймаут одного запроса к сайту
+TELEGRAM_CHAT_ID = ""     # ← впиши свой chat_id (тот же, что в деплое). Это не секрет.
+# MUST_INCLUDE = "Чистая Защита"  # необязательно: строка, которая должна быть на странице
+
+# Хранилище состояния up/down. id подставить после создания неймспейса (см. README).
+[[kv_namespaces]]
+binding = "MONITOR_KV"
+id = "<KV_NAMESPACE_ID>"
