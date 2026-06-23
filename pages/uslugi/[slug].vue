@@ -4,6 +4,7 @@ const { trackGoal } = useMetrika()
 import logoImage from '~/src/assets/images/logo.webp'
 import heroFallbackImage from '~/src/assets/images/hero-main.webp'
 import AppHeader from '~/src/components/AppHeader.vue'
+import AppBreadcrumb from '~/src/components/AppBreadcrumb.vue'
 import AppIcon from '~/src/components/AppIcon.vue'
 import { company, siteMeta } from '~/src/data/company'
 import { findSegment, segments } from '~/src/data/segments'
@@ -22,6 +23,12 @@ const relevantPests = segment.relevantPests
   .filter((pest) => Boolean(pest))
 
 const otherSegments = segments.filter((item) => item.slug !== segment.slug)
+
+const breadcrumbItems = [
+  { label: 'Главная', to: '/' },
+  { label: 'Услуги', to: '/uslugi' },
+  { label: segment.navLabel, current: true },
+]
 
 const runtimeConfig = useRuntimeConfig()
 const requestUrl = useRequestURL()
@@ -147,15 +154,7 @@ async function submitForm() {
     <AppHeader />
 
     <main>
-      <nav class="breadcrumb" aria-label="Навигация по сайту">
-        <div class="container breadcrumb__inner">
-          <NuxtLink to="/">Главная</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <NuxtLink to="/#services">Услуги</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page">{{ segment.navLabel }}</span>
-        </div>
-      </nav>
+      <AppBreadcrumb :items="breadcrumbItems" />
 
       <section class="segment-hero">
         <div class="container segment-hero__grid">

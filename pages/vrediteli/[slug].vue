@@ -13,6 +13,7 @@ import serviceMouseImage from '~/src/assets/images/service-mouse.png'
 import logoImage from '~/src/assets/images/logo.webp'
 import heroFallbackImage from '~/src/assets/images/hero-main.webp'
 import AppHeader from '~/src/components/AppHeader.vue'
+import AppBreadcrumb from '~/src/components/AppBreadcrumb.vue'
 import AppIcon from '~/src/components/AppIcon.vue'
 import { company, siteMeta } from '~/src/data/company'
 import { findPest, pests } from '~/src/data/pests'
@@ -167,6 +168,12 @@ useHead({
 const stepIcons = ['wand', 'shield', 'beaker', 'repeat', 'document']
 const otherPests = pests.filter((p) => p.slug !== pest.slug)
 
+const breadcrumbItems = [
+  { label: 'Главная', to: '/' },
+  { label: 'Услуги', to: '/uslugi' },
+  { label: pest.nameNominative, current: true },
+]
+
 const openedFaq = ref(0)
 function toggleFaq(index) {
   openedFaq.value = openedFaq.value === index ? -1 : index
@@ -204,15 +211,7 @@ async function submitForm() {
     <AppHeader />
 
     <main>
-      <nav class="breadcrumb" aria-label="Навигация по сайту">
-        <div class="container breadcrumb__inner">
-          <NuxtLink to="/">Главная</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <NuxtLink to="/#services">Услуги</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page">{{ pest.nameNominative }}</span>
-        </div>
-      </nav>
+      <AppBreadcrumb :items="breadcrumbItems" />
 
       <section class="pest-hero">
         <div class="container pest-hero__grid">

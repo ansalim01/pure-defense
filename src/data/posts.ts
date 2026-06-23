@@ -1,57 +1,12 @@
-// Blog content is authored here in TypeScript (same data-driven approach as
-// pests.ts). Paragraph/callout blocks accept trusted authored HTML so we can
-// embed internal links to service pages — this is editorial content, never
-// user input, so v-html in BlogContent.vue is safe.
+// Blog metadata + long-form bodies (src/data/blog/bodies/).
 
-export type BlogImageKey = 'cockroach' | 'bedbug' | 'rat' | 'mold' | 'disinfection'
+import { blogContentBySlug } from './blog/bodies'
+import { estimateReadingMinutes, type BlogBlock, type BlogFaq, type BlogImageKey, type BlogPost } from './blog-types'
 
-export interface BlogBlock {
-  type: 'heading' | 'subheading' | 'paragraph' | 'list' | 'callout' | 'quote'
-  /** heading / subheading / quote */
-  text?: string
-  /** paragraph / callout — trusted authored HTML (may contain internal <a> links) */
-  html?: string
-  /** callout heading */
-  title?: string
-  /** quote attribution */
-  author?: string
-  /** list items (may contain inline HTML) */
-  items?: string[]
-  /** render list as <ol> instead of <ul> */
-  ordered?: boolean
-}
+export type { BlogBlock, BlogFaq, BlogImageKey, BlogPost } from './blog-types'
+export { estimateReadingMinutes } from './blog-types'
 
-export interface BlogFaq {
-  question: string
-  answer: string
-}
-
-export interface BlogPost {
-  slug: string
-  /** H1 + listing card title */
-  title: string
-  /** <title> — keep ≤ 60 chars where possible */
-  metaTitle: string
-  /** meta description + og:description — 120–160 chars */
-  metaDesc: string
-  /** listing card teaser + lead under the H1 */
-  excerpt: string
-  /** human-readable category label (e.g. "Тараканы") */
-  category: string
-  datePublished: string
-  dateModified: string
-  readingMinutes: number
-  imageKey: BlogImageKey
-  imageAlt: string
-  /** "Коротко" summary box — strong for featured snippets */
-  keyTakeaways: string[]
-  body: BlogBlock[]
-  faqs: BlogFaq[]
-  /** CTA card → /vrediteli/<slug> */
-  relatedService: { label: string; slug: string }
-}
-
-export const posts: BlogPost[] = [
+export const rawPosts: BlogPost[] = [
   {
     slug: 'kak-izbavitsya-ot-tarakanov',
     title: 'Как избавиться от тараканов в квартире: пошаговое руководство',
@@ -1810,6 +1765,19 @@ export const posts: BlogPost[] = [
     relatedService: { label: 'Уничтожение клопов в Казани', slug: 'klopy' },
   },
 ]
+
+export const posts: BlogPost[] = rawPosts.map((post) => {
+  const content = blogContentBySlug[post.slug]
+  if (!content) return post
+
+  return {
+    ...post,
+    body: content.body,
+    faqs: content.faqs,
+    dateModified: '2026-06-22',
+    readingMinutes: estimateReadingMinutes(content.body, content.faqs),
+  }
+})
 
 export function findPost(slug: string): BlogPost | undefined {
   return posts.find((p) => p.slug === slug)
