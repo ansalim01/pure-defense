@@ -7,6 +7,7 @@ import serviceMoldImage from '~/src/assets/images/service-mold.webp'
 import serviceDisinfectionImage from '~/src/assets/images/service-disinfection.webp'
 import logoImage from '~/src/assets/images/logo.webp'
 import AppHeader from '~/src/components/AppHeader.vue'
+import AppBreadcrumb from '~/src/components/AppBreadcrumb.vue'
 import AppIcon from '~/src/components/AppIcon.vue'
 import BlogContent from '~/src/components/BlogContent.vue'
 import { company, siteMeta } from '~/src/data/company'
@@ -135,6 +136,12 @@ const openedFaq = ref(0)
 function toggleFaq(index) {
   openedFaq.value = openedFaq.value === index ? -1 : index
 }
+
+const breadcrumbItems = computed(() => [
+  { label: 'Главная', to: '/' },
+  { label: 'Блог', to: '/blog' },
+  { label: post.category, current: true },
+])
 </script>
 
 <template>
@@ -142,15 +149,7 @@ function toggleFaq(index) {
     <AppHeader />
 
     <main>
-      <nav class="breadcrumb" aria-label="Навигация по сайту">
-        <div class="container breadcrumb__inner">
-          <NuxtLink to="/">Главная</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <NuxtLink to="/blog">Блог</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page">{{ post.category }}</span>
-        </div>
-      </nav>
+      <AppBreadcrumb :items="breadcrumbItems" />
 
       <article class="post">
         <header class="post__header">

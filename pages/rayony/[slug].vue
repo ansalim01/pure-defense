@@ -2,6 +2,7 @@
 import { computed, reactive, ref } from 'vue'
 const { trackGoal } = useMetrika()
 import AppHeader from '~/src/components/AppHeader.vue'
+import AppBreadcrumb from '~/src/components/AppBreadcrumb.vue'
 import AppIcon from '~/src/components/AppIcon.vue'
 import heroFallbackImage from '~/src/assets/images/hero-main.webp'
 import { company, siteMeta } from '~/src/data/company'
@@ -130,6 +131,12 @@ async function submitForm() {
     form.loading = false
   }
 }
+
+const breadcrumbItems = [
+  { label: 'Главная', to: '/' },
+  { label: 'Районы Казани', to: '/rayony' },
+  { label: district.name, current: true },
+]
 </script>
 
 <template>
@@ -137,15 +144,7 @@ async function submitForm() {
     <AppHeader />
 
     <main>
-      <nav class="breadcrumb" aria-label="Навигация по сайту">
-        <div class="container breadcrumb__inner">
-          <NuxtLink to="/">Главная</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <NuxtLink to="/rayony">Районы Казани</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page">{{ district.name }}</span>
-        </div>
-      </nav>
+      <AppBreadcrumb :items="breadcrumbItems" />
 
       <section class="rayony-hero">
         <div class="container">

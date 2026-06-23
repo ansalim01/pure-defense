@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 const { trackGoal } = useMetrika()
 import AppHeader from '~/src/components/AppHeader.vue'
+import AppBreadcrumb from '~/src/components/AppBreadcrumb.vue'
 import AppIcon from '~/src/components/AppIcon.vue'
 import heroFallbackImage from '~/src/assets/images/hero-main.webp'
 import { company, seoFaqs, siteMeta } from '~/src/data/company'
@@ -116,13 +117,10 @@ useHead({
     <AppHeader />
 
     <main>
-      <nav class="breadcrumb" aria-label="Навигация по сайту">
-        <div class="container breadcrumb__inner">
-          <NuxtLink to="/">Главная</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page">Услуги</span>
-        </div>
-      </nav>
+      <AppBreadcrumb :items="[
+        { label: 'Главная', to: '/' },
+        { label: 'Услуги', current: true },
+      ]" />
 
       <section class="hub-hero">
         <div class="container">

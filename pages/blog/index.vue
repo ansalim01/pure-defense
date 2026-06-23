@@ -7,6 +7,7 @@ import serviceMoldImage from '~/src/assets/images/service-mold.webp'
 import serviceDisinfectionImage from '~/src/assets/images/service-disinfection.webp'
 import logoImage from '~/src/assets/images/logo.webp'
 import AppHeader from '~/src/components/AppHeader.vue'
+import AppBreadcrumb from '~/src/components/AppBreadcrumb.vue'
 import AppIcon from '~/src/components/AppIcon.vue'
 import { company, siteMeta } from '~/src/data/company'
 import { posts } from '~/src/data/posts'
@@ -112,13 +113,10 @@ useHead({
     <AppHeader />
 
     <main>
-      <nav class="breadcrumb" aria-label="Навигация по сайту">
-        <div class="container breadcrumb__inner">
-          <NuxtLink to="/">Главная</NuxtLink>
-          <span aria-hidden="true">/</span>
-          <span aria-current="page">Блог</span>
-        </div>
-      </nav>
+      <AppBreadcrumb :items="[
+        { label: 'Главная', to: '/' },
+        { label: 'Блог', current: true },
+      ]" />
 
       <section class="blog-hero">
         <div class="container">

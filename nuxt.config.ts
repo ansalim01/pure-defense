@@ -1,3 +1,9 @@
+const siteOrigin = (process.env.NUXT_PUBLIC_SITE_URL || 'https://dez-profi-kazan.ru').replace(/\/+$/, '')
+
+function assetUrl(path: string) {
+  return `${siteOrigin}${path.startsWith('/') ? path : `/${path}`}`
+}
+
 export default defineNuxtConfig({
   compatibilityDate: '2026-06-22',
   experimental: {
@@ -109,16 +115,17 @@ export default defineNuxtConfig({
         { name: 'yandex-verification', content: '60b9266cdbfedd61' },
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        // Legacy alias — старые парсеры Яндекса ищут именно "shortcut icon"
-        { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16.png' },
-        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png' },
-        // Крупный растровый значок: Яндекс предпочитает ≥120×120 для карточки в выдаче
-        { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/favicon-192.png' },
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-        { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
-        { rel: 'manifest', href: '/site.webmanifest' },
+        // Яндекс Вебмастер: абсолютный href + type image/x-icon (см. help.yandex.ru/webmaster)
+        { rel: 'icon', type: 'image/x-icon', href: assetUrl('/favicon.ico'), tagPriority: -100 },
+        { rel: 'shortcut icon', type: 'image/x-icon', href: assetUrl('/favicon.ico'), tagPriority: -99 },
+        // Растровый значок ≥120×120 — рекомендация Яндекса для сниппета в выдаче
+        { rel: 'icon', type: 'image/png', sizes: '120x120', href: assetUrl('/favicon-120.png'), tagPriority: -98 },
+        // Робот Яндекса также может взять apple-touch-icon
+        { rel: 'apple-touch-icon', sizes: '180x180', href: assetUrl('/apple-touch-icon.png'), tagPriority: -97 },
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: assetUrl('/favicon-16.png') },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: assetUrl('/favicon-32.png') },
+        { rel: 'icon', type: 'image/png', sizes: '192x192', href: assetUrl('/favicon-192.png') },
+        { rel: 'manifest', href: assetUrl('/site.webmanifest') },
       ],
       // GTM + Yandex Metrika are loaded lazily by plugins/analytics.client.ts
       // (after first interaction / idle) so they don't compete with the hero

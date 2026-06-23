@@ -4,13 +4,15 @@ import logoImage from '../assets/images/logo.webp'
 import AppIcon from './AppIcon.vue'
 import { company } from '../data/company'
 import { pests } from '../data/pests'
+
 const { trackGoal } = useMetrika()
+const { goToHomeSection } = useHomeAnchor()
 
 const navigation = [
-  { label: 'Как мы работаем', href: '/#process' },
-  { label: 'Отзывы', href: '/#reviews' },
-  { label: 'Вопросы', href: '/#faq' },
-  { label: 'Контакты', href: '/#contacts' },
+  { label: 'Как мы работаем', hash: '#process' },
+  { label: 'Отзывы', hash: '#reviews' },
+  { label: 'Вопросы', hash: '#faq' },
+  { label: 'Контакты', hash: '#contacts' },
 ]
 
 const mobileMenuBreakpoint = 1040
@@ -25,6 +27,11 @@ function closeMenu() {
 function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value
   document.body.style.overflow = isMenuOpen.value ? 'hidden' : ''
+}
+
+function onHomeAnchorClick(event, hash) {
+  goToHomeSection(hash, event)
+  closeMenu()
 }
 
 onMounted(() => {
@@ -78,9 +85,16 @@ onBeforeUnmount(() => {
 
       <!-- Desktop nav -->
       <nav id="site-navigation" class="nav" aria-label="Основная навигация">
-        <NuxtLink to="/#services">Услуги</NuxtLink>
+        <a href="/#services" @click="onHomeAnchorClick($event, '#services')">Услуги</a>
         <NuxtLink to="/blog">Блог</NuxtLink>
-        <a v-for="item in navigation" :key="item.href" :href="item.href">{{ item.label }}</a>
+        <a
+          v-for="item in navigation"
+          :key="item.hash"
+          :href="`/${item.hash}`"
+          @click="onHomeAnchorClick($event, item.hash)"
+        >
+          {{ item.label }}
+        </a>
       </nav>
 
       <!-- Desktop CTA -->
@@ -89,7 +103,9 @@ onBeforeUnmount(() => {
           <a class="header__phone" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
           <span class="header__hours">{{ company.workingHours }}</span>
         </div>
-        <a class="button button--ghost button--small" href="/#contacts">Перезвоните мне</a>
+        <a class="button button--ghost button--small" href="/#contacts" @click="onHomeAnchorClick($event, '#contacts')">
+          Перезвоните мне
+        </a>
       </div>
 
       <!-- Mobile: scrollable menu body -->
@@ -113,7 +129,12 @@ onBeforeUnmount(() => {
             <div class="nav__divider" aria-hidden="true" />
 
             <NuxtLink to="/blog" @click="closeMenu">Блог</NuxtLink>
-            <a v-for="item in navigation" :key="item.href" :href="item.href" @click="closeMenu">
+            <a
+              v-for="item in navigation"
+              :key="item.hash"
+              :href="`/${item.hash}`"
+              @click="onHomeAnchorClick($event, item.hash)"
+            >
               {{ item.label }}
             </a>
           </nav>
@@ -123,7 +144,13 @@ onBeforeUnmount(() => {
               <a class="header__phone" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
               <span class="header__hours">{{ company.workingHours }}</span>
             </div>
-            <a class="button button--ghost button--small" href="/#contacts" @click="closeMenu">Перезвоните мне</a>
+            <a
+              class="button button--ghost button--small"
+              href="/#contacts"
+              @click="onHomeAnchorClick($event, '#contacts')"
+            >
+              Перезвоните мне
+            </a>
           </div>
         </div>
       </Transition>

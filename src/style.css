@@ -318,6 +318,37 @@ section[id] {
   text-underline-offset: 0.16em;
 }
 
+.breadcrumb {
+  background: #fff;
+  border-bottom: 1px solid var(--slate-200);
+}
+
+.breadcrumb__inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 0.8125rem;
+  color: var(--slate-700);
+  flex-wrap: wrap;
+}
+
+.breadcrumb__inner a {
+  color: var(--slate-700);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb__inner a:hover {
+  color: var(--green-500);
+}
+
+.breadcrumb__inner span[aria-current] {
+  color: #24364d;
+  font-weight: 600;
+}
+
 .header {
   position: -webkit-sticky; /* Safari < 13 / older Telegram WebView */
   position: sticky;
