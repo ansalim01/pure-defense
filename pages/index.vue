@@ -97,6 +97,13 @@ const structuredData = computed(() => ({
           areaServed: company.region,
           availableLanguage: ['Russian'],
         },
+        {
+          '@type': 'ContactPoint',
+          telephone: company.phoneSecondarySchema,
+          contactType: 'customer support',
+          areaServed: company.region,
+          availableLanguage: ['Russian'],
+        },
       ],
       aggregateRating: {
         '@type': 'AggregateRating',

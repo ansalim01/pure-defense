@@ -125,7 +125,9 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '16x16', href: assetUrl('/favicon-16.png') },
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: assetUrl('/favicon-32.png') },
         { rel: 'icon', type: 'image/png', sizes: '192x192', href: assetUrl('/favicon-192.png') },
-        { rel: 'manifest', href: assetUrl('/site.webmanifest') },
+        // Relative (same-origin) so the manifest loads without CORS on any host,
+        // incl. localhost dev; in prod it still resolves to the site origin.
+        { rel: 'manifest', href: '/site.webmanifest' },
       ],
       // GTM + Yandex Metrika are loaded lazily by plugins/analytics.client.ts
       // (after first interaction / idle) so they don't compete with the hero

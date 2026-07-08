@@ -507,19 +507,34 @@ section[id] {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 2px;
+  gap: 1px;
+  line-height: 1.25;
+}
+
+.header__phones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .header__phone {
-  font-size: 1.06rem;
+  font-size: 1.02rem;
   font-weight: 800;
   color: var(--navy-900);
   white-space: nowrap;
 }
 
-.header__hours {
-  color: var(--slate-700);
+.header__phone--secondary {
+  padding-left: 10px;
+  border-left: 1px solid var(--slate-200);
   font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--slate-500);
+}
+
+.header__hours {
+  color: var(--slate-500);
+  font-size: 0.82rem;
   white-space: nowrap;
 }
 
@@ -1775,7 +1790,7 @@ section[id] {
   }
 }
 
-@media (max-width: 1040px) {
+@media (max-width: 1300px) {
   .header__inner {
     grid-template-columns: minmax(0, 1fr) auto auto;
     gap: 16px;
@@ -1925,9 +1940,23 @@ section[id] {
     align-items: flex-start;
   }
 
+  .header__cta--open .header__phones {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
   .header__cta--open .header__phone {
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1.05rem;
+  }
+
+  .header__cta--open .header__phone--secondary {
+    padding-left: 12px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
   }
 
   .header__cta--open .header__hours {
