@@ -100,7 +100,10 @@ onBeforeUnmount(() => {
       <!-- Desktop CTA -->
       <div class="header__cta">
         <div class="header__contact">
-          <a class="header__phone" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
+          <div class="header__phones">
+            <a class="header__phone" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
+            <a class="header__phone header__phone--secondary" :href="company.phoneSecondaryHref" @click="trackGoal('phone_click')">{{ company.phoneSecondaryDisplay }}</a>
+          </div>
           <span class="header__hours">{{ company.workingHours }}</span>
         </div>
         <a class="button button--ghost button--small" href="/#contacts" @click="onHomeAnchorClick($event, '#contacts')">
@@ -141,7 +144,10 @@ onBeforeUnmount(() => {
 
           <div class="header__cta header__cta--open">
             <div class="header__contact">
-              <a class="header__phone" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
+              <div class="header__phones">
+                <a class="header__phone" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
+                <a class="header__phone header__phone--secondary" :href="company.phoneSecondaryHref" @click="trackGoal('phone_click')">{{ company.phoneSecondaryDisplay }}</a>
+              </div>
               <span class="header__hours">{{ company.workingHours }}</span>
             </div>
             <a

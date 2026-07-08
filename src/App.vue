@@ -616,7 +616,8 @@ async function submitContactForm() {
 
             <p class="contact-card__text">
               Работаем официально как {{ company.legalName }}. Для связи используйте
-              <a class="text-link" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
+              <a class="text-link" :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>,
+              <a class="text-link" :href="company.phoneSecondaryHref" @click="trackGoal('phone_click')">{{ company.phoneSecondaryDisplay }}</a>
               или
               <a class="text-link" :href="company.emailHref">{{ company.email }}</a>.
             </p>
@@ -739,6 +740,7 @@ async function submitContactForm() {
           <h3>Контакты</h3>
           <address>
             <a :href="company.phoneHref" @click="trackGoal('phone_click')">{{ company.phoneDisplay }}</a>
+            <a :href="company.phoneSecondaryHref" @click="trackGoal('phone_click')">{{ company.phoneSecondaryDisplay }}</a>
             <a :href="company.emailHref">{{ company.email }}</a>
             <a :href="company.mapsHref" target="_blank" rel="noopener noreferrer" @click.prevent="openExternalLink(company.mapsHref)">{{ company.address }}</a>
             <small>{{ company.legalName }}</small>
